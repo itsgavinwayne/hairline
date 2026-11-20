@@ -24,6 +24,9 @@ SITE_NAMES = set()   # 同上，去掉文档站自己定义的同名变量
 SAMPLES = set()      # 同上：示例屏的页名（小写），目录按语言筛选时用
 TYPE_NAMES = set()   # 字体样式的名字，会变成类名
 STATIC = os.path.join(HERE, 'site-static')   # 原样拷进 site/assets 的文件：favicon、分享卡片
+REPO_URL = 'https://github.com/itsgavinwayne/hairline'   # 开源仓库，顶栏右侧的 GitHub 图标链到这里
+# GitHub 的标志，取自 GitHub 官方的 Octicons（mark-github，16 格）。品牌标志照原样用，不改形、不改比例
+GITHUB_MARK = 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'
 SITE_URL = 'https://hairline.gavinwayne.com/'   # 网站的完整地址：分享卡片的图、规范链接、404 页的起点、llms.txt 里的地址都从这里来
 FONTS = 'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap'
 
@@ -53,7 +56,7 @@ EN = {
     '安装': 'Install', '快速上手': 'Quick start', '设计原则': 'Design principles', '行为与脚本': 'Behavior and scripts', '网页与大屏': 'Web and large screens', '英文界面': 'English interfaces', '阅读与内容': 'Reading and content', '平面与印刷': 'Print and graphics', '审美标准与出处': 'Aesthetic standards and sources', '产物分类': 'Kinds of output', '图形与素材': 'Imagery and assets', '印稿规范': 'Seal design', '参考与取舍': 'References and trade-offs', '命名对照': 'Naming reference',
     '色彩': 'Color', '字体': 'Type', '间距与圆角': 'Spacing and radius', '阴影与层级': 'Shadow and layers',
     # 页面外壳
-    '打开目录': 'Open contents', 'Hairline 首页': 'Hairline home', '主导航': 'Main', '切换昼夜主题': 'Switch between day and night', '全站目录': 'Site index', '目录': 'Contents', '文档目录': 'Pages',
+    '打开目录': 'Open contents', 'Hairline 首页': 'Hairline home', '主导航': 'Main', '切换昼夜主题': 'Switch between day and night', 'GitHub 上的源代码': 'Source code on GitHub', '全站目录': 'Site index', '目录': 'Contents', '文档目录': 'Pages',
     '界面基于毫（Hairline）设计系统': 'Built with the Hairline design system', '没有找到，换一个词试试。': 'Nothing matches. Try another word.',
     '本页内容': 'On this page', '上一页与下一页': 'Previous and next page', '上一页': 'Previous', '下一页': 'Next', '跳到正文': 'Skip to content',
     '毫 Hairline 设计系统': 'Hairline design system', ' · 毫 Hairline': ' · Hairline', '毫 Hairline': 'Hairline', '设计系统': 'Design system',
@@ -576,8 +579,9 @@ def shell(rel, title, content, nav, active, prev_next=None, wide=False, home=Fal
   %s<a class="hao-logo hao-logo--sm hao-logo--ink site-top__logo" href="%sindex.html" lang="en" aria-label="%s"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill-rule="evenodd" d="%s"/></svg><span class="site-top__name">Hairline</span></a>
   <nav class="site-top__links" aria-label="%s">%s</nav>
   %s
+  <a class="hao-nav__action site-gh" href="%s" aria-label="%s"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="%s"/></svg></a>
   <button class="hao-nav__action site-theme" type="button" data-site-theme aria-label="%s"><i class="hao-icon hao-icon--moon" aria-hidden="true"></i></button>
-</div></header>''' % (menu, root, T('Hairline 首页'), MARK, T('主导航'), toplinks, other, T('切换昼夜主题'))
+</div></header>''' % (menu, root, T('Hairline 首页'), MARK, T('主导航'), toplinks, other, REPO_URL, T('GitHub 上的源代码'), GITHUB_MARK, T('切换昼夜主题'))
     # 落款的年款：中文页写汉字、不用斜体，英文页是斜体的 colophon（见 source/english.md）
     sign = '<span class="hao-colophon" lang="en">Winter, the Bingwu year</span>' if en else '<span class="hao-colophon">丙午年冬</span>'
     if home:
@@ -738,6 +742,11 @@ body.site { margin: 0; background: var(--color-paper); color: var(--color-ink); 
 .site-lang:active { opacity: 0.7; }
 .site-lang:focus-visible { outline-offset: -2px; }
 .site-top .site-theme { background: none; }
+/* GitHub 标志是实心的，比 1.5px 的线性图标显重，画小两号才和旁边的月亮一样重 */
+.site-top .site-gh { width: 44px; padding: 0; color: var(--color-ink-2); }
+.site-top .site-gh:hover { color: var(--color-ink); }
+.site-gh:active { opacity: 0.7; }
+.site-gh svg { display: block; width: 18px; height: 18px; fill: currentColor; }
 .site-top .hao-nav__action { min-width: 44px; justify-content: center; border-radius: var(--radius-sm); transition: background-color var(--dur-micro) var(--ease-out); }
 .site-top .hao-nav__action:hover { background: var(--color-paper-3); text-decoration: none; }
 .site-top .hao-nav__action .hao-icon { margin: 0; }

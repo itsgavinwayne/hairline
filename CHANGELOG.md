@@ -5,6 +5,12 @@
 
 ## 1.0.0（未上线）
 
+### 2026-11-20 文档站：顶栏加 GitHub 链接
+
+- 顶栏右侧、语言切换和昼夜按钮之间加了 GitHub 的标志，链到开源仓库 `https://github.com/itsgavinwayne/hairline`。中英文、昼夜、窄屏都有。
+- 标志取自 GitHub 官方的 Octicons，照原样用，没有改形。它是实心的，比旁边 1.5px 的线性图标显重，所以画到 18px，点按区域仍是 44 见方。颜色和语言切换一样用次一级的墨色，悬停加深。
+- 仓库地址写在 `build_site.py` 的 `REPO_URL` 一处。
+
 ### 2026-11-20 文档站自动部署
 
 - 新增 `.github/workflows/deploy.yml`：推送到 `main` 之后重新生成文档站，发布到 GitHub Pages，地址是 `https://hairline.gavinwayne.com`。发布前先跑不用浏览器的检查，没过就不发布。
