@@ -1,37 +1,109 @@
-# 毫 Hairline
+<p align="center">
+  <img src="site-static/og.png" alt="Hairline: the restraint of iOS, with a trace of Chinese character" width="720">
+</p>
 
-iOS 的克制，加一点东方气韵。一套中英双语、昼夜两套主题的设计系统：一份样式表、一份行为脚本、一份令牌，不依赖任何框架，也不需要构建工具。
+<h1 align="center">毫 Hairline</h1>
 
-A design system with the restraint of iOS and a trace of East Asian character. Bilingual (Chinese and English), light and dark. One stylesheet, one script, one token file; no framework and no build step. English documentation lives under `site/en/` once the site is built.
+<p align="center">
+  A design system with the restraint of iOS and a trace of Chinese character.<br>
+  One stylesheet, one script, one token file. No framework, no build step.
+</p>
 
-## 拿去用
+<p align="center">
+  <a href="https://hairline.gavinwayne.com">Documentation</a> ·
+  <a href="README.zh-CN.md">简体中文</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
 
-把 `dist/` 里的文件放进自己的项目：
+<p align="center">
+  <a href="https://github.com/itsgavinwayne/hairline/actions/workflows/check.yml"><img src="https://github.com/itsgavinwayne/hairline/actions/workflows/check.yml/badge.svg" alt="Checks"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/code-MIT-1f4ea8" alt="Code license: MIT"></a>
+  <a href="LICENSE-docs.md"><img src="https://img.shields.io/badge/docs-CC%20BY%204.0-1f4ea8" alt="Docs license: CC BY 4.0"></a>
+</p>
 
-| 文件 | 内容 |
-| --- | --- |
-| `dist/hairline.css` | 全部令牌和所有组件的样式，含昼夜两套主题 |
-| `dist/hairline.js` | 弹窗、菜单、月历等组件的行为。可选，不加载它组件照样能看 |
-| `dist/tokens.json` | 令牌的原始数据，给设计工具或别的平台用 |
+<p align="center">
+  <img src="docs/readme/web-light.png" alt="A notes app built with Hairline, light theme, English" width="820">
+</p>
+
+<p align="center">
+  <img src="docs/readme/screen-light.png" alt="A phone screen built with Hairline, light theme, Chinese" width="300">
+  <img src="docs/readme/screen-dark.png" alt="The same screen in the dark theme, English" width="300">
+</p>
+
+## What it is
+
+Hairline takes its structure, density, and interaction from iOS, and its color, display type, and use of empty space from Chinese craft: azurite blue, the cinnabar red of a seal, the white of rice paper.
+
+- **Plain HTML and CSS.** Components are class names on native elements. Works with any framework or none.
+- **Bilingual by design.** Chinese and English each get their own type scale, line height, and punctuation rules, switched by the `lang` attribute.
+- **Light and dark.** Every color token has both values; set `data-theme` or follow the system.
+- **Four kinds of output.** Interfaces, long-form reading, posters and print, and brand marks share one foundation.
+- **Accessible defaults.** Native controls first, visible focus, keyboard support, WCAG 2.2 AA contrast, reduced motion respected.
+- **Checked on every commit.** Token consistency, behavior tests, and an audit of every component for overflow, clipping, contrast, and centering.
+
+## Quick start
+
+Add the stylesheet and the optional script. This link serves the files straight from this repository:
 
 ```html
-<link rel="stylesheet" href="hairline.css">
-<script src="hairline.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/itsgavinwayne/hairline@main/dist/hairline.css">
+<script src="https://cdn.jsdelivr.net/gh/itsgavinwayne/hairline@main/dist/hairline.js" defer></script>
 ```
 
-类名以 `hao-` 开头，变量以 `--hao-` 开头。目前还没有发布到 npm，也没有公共的 CDN 地址；`package.json` 已经备好，暂时标着 `private`。
+Or copy the three files in [`dist/`](dist) into your project:
 
-## 让 AI 来用
+| File | What it holds |
+| --- | --- |
+| `hairline.css` | Every token and every component, both themes |
+| `hairline.js` | Behavior for dialogs, menus, the calendar, toasts. Optional: components render without it |
+| `tokens.json` | The raw token data, for design tools and other platforms |
 
-`skills/hairline/` 是一份给 AI 的技能包：一页怎么用的说明、全部规范、令牌表、每个组件的说明和可以直接抄的标记，外加 `dist/` 的三个文件。
+Then write markup:
 
-- **Claude Code**：把 `skills/hairline` 整个文件夹拷到 `~/.claude/skills/`（所有项目可用）或项目里的 `.claude/skills/`（只这个项目可用）。之后说「用 Hairline 做一个设置页」，它会自己去读。
-- **别的 AI 工具**：让它先读 `skills/hairline/SKILL.md`，里面写明了其余文件各管什么。
-- **只能读网页的 AI**：文档站根目录有 `llms.txt`（全站目录）和 `llms-full.txt`（全部内容连成的一份纯文本），英文的在 `/en/` 下。
+```html
+<html lang="en" data-theme="light">
+  ...
+  <button class="hao-btn">Save changes</button>
+  <label class="hao-switch">Daily reminder <input type="checkbox" role="switch" checked></label>
+</html>
+```
 
-技能包里除了 `SKILL.md` 都是生成的，改了 `source/` 之后跑 `python3 tools/build_skill.py` 重建（全量检查会替你跑）。
+Classes start with `hao-` and CSS variables with `--hao-`, so nothing collides with what you already have. Every component page in the documentation has a live demo and copy-ready markup.
 
-## 看文档
+Not on npm yet. Until a tagged release exists, `@main` in the link above follows the latest commit; pin a commit hash if you need it to stay put.
+
+## Three rules
+
+What separates Hairline from a Chinese-style skin is what it leaves out. Check these before you ship a screen:
+
+1. **One touch of cinnabar.** Red appears once per screen: a seal, a badge, or a destructive button.
+2. **One scene per screen.** At most one pattern, illustration, or mounted picture. Settings and forms get none.
+3. **One image per control.** Progress uses one metaphor; the moon appears in one place.
+
+The full reasoning, and the five aesthetic standards behind it (plain, empty, pale, fine, off-center), are in the [documentation](https://hairline.gavinwayne.com).
+
+## Use it with AI
+
+[`skills/hairline/`](skills/hairline) is a skill package for AI coding assistants: a one-page guide, every guideline, the token tables, and each component's write-up with copy-ready markup in both languages.
+
+- **Claude Code:** copy the `skills/hairline` folder into `~/.claude/skills/` (all projects) or `.claude/skills/` (one project), then ask for something like "build a settings page with Hairline".
+- **Other assistants:** point them at `skills/hairline/SKILL.md`; it says what every other file is for.
+- **Assistants that only read the web:** the documentation site serves `llms.txt` and `llms-full.txt`.
+
+## What's inside
+
+| Path | Contents |
+| --- | --- |
+| `source/` | The only place edited by hand: tokens, components, icons, guidelines. English text lives in `source/en/` |
+| `dist/` | The three generated files people use |
+| `skills/hairline/` | The AI skill package; `SKILL.md` is written by hand, the rest is generated |
+| `build_site.py` | Checks the tokens, then generates `dist/` and the documentation site |
+| `tests/` | Behavior tests and the component audit, as pages that run in a browser |
+| `tools/` | Checks, the skill builder, screenshots |
+
+## Develop
+
+Requires Python 3 and, for the browser checks, Chrome or Chromium. There are no dependencies to install.
 
 ```bash
 python3 build_site.py
@@ -41,43 +113,26 @@ python3 build_site.py
 python3 -m http.server 4173 --directory site
 ```
 
-然后打开 <http://localhost:4173>。中文在根目录，英文在 `/en/`。
-
-## 目录
-
-| 位置 | 是什么 |
-| --- | --- |
-| `source/` | 唯一要手改的地方：令牌、组件、图标、规范，英文稿在 `source/en/` |
-| `dist/` | 生成出来给人用的三个文件，不要直接改 |
-| `site/` | 生成出来的文档站，不入库 |
-| `build_site.py` | 核对令牌，生成 `dist/` 和 `site/` |
-| `tests/` | 行为测试、组件审计、审阅工作台，都是浏览器里打开的页面 |
-| `skills/hairline/` | 给 AI 用的技能包，`SKILL.md` 手写，其余由 `tools/build_skill.py` 生成 |
-| `tools/` | 核对脚本和截图工具 |
-
-## 改了东西之后
+Open <http://localhost:4173>. Before committing, run every check with one command:
 
 ```bash
 python3 tools/check_all.py
 ```
 
-一条命令跑完全部检查：令牌核对与生成、`dist/` 是否最新、版本号、英文稿、站点链接、行为测试、组件审计。后两步在无头的 Chrome 里跑，本机没有 Chrome 时加 `--no-browser` 只跑其余几步。
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the conventions. Edit `source/`, never `dist/`; commit the regenerated `dist/` and `skills/` together with your change.
 
-- 改 `source/`，不改 `dist/`；改完重新生成，把 `dist/` 和 `skills/` 一起提交。
-- 改了中文稿，同步改 `source/en/` 里对应的英文稿。
-- 版本号写在 `source/components/bundle.js` 的 `version`，`package.json` 里那一处要跟着改，检查会核对两处是否相同。
-- 改动记进 `CHANGELOG.md`。
+## Browser support
 
-## 参与
+The last two years of Chrome, Safari, Edge, and Firefox. A few refinements (automatic spacing between Chinese and Latin text, the styled select panel) rely on newer features and fall back quietly where they are missing.
 
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+## Good fit, poor fit
 
-## 许可
+Suited to reading, writing, notes, calendars, lifestyle, culture and education, personal brands, and content sites. Less suited to very dense professional tools, games, and products for children: they want a density or a mood that runs against this system's empty space and restraint.
 
-- 代码（样式表、脚本、令牌、图标、工具）：[MIT](LICENSE)。
-- 规范与文档：[CC BY 4.0](LICENSE-docs.md)，转载和改编请署名。
-- 「毫」「Hairline」这个名字和标志保留：可以说你的产品基于这套系统，但改过再发布请换一个名字。
+## License
 
-细则见 [LICENSE-docs.md](LICENSE-docs.md)。
+- Code (stylesheets, scripts, tokens, icons, tools): [MIT](LICENSE).
+- Guidelines and documentation: [CC BY 4.0](LICENSE-docs.md).
+- The name "毫 / Hairline" and its mark are reserved. Say your product is built with Hairline; if you publish a modified version, give it another name.
 
-Code is MIT; guidelines and documentation are CC BY 4.0; the name and mark are reserved. See [LICENSE-docs.md](LICENSE-docs.md).
+Details are in [LICENSE-docs.md](LICENSE-docs.md).

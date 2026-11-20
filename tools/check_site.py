@@ -16,6 +16,9 @@ from urllib.parse import unquote
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(HERE, 'site')
+with open(os.path.join(HERE, 'build_site.py'), encoding='utf-8') as _f:
+    _m = re.search(r"^SITE_URL = '([^']*)'", _f.read(), flags=re.M)
+SITE_URL = (_m.group(1).rstrip('/') + '/') if _m and _m.group(1) else ''
 HAN = re.compile(r'[㐀-鿿]')
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr', 'path', 'circle', 'rect'}
 
@@ -106,7 +109,12 @@ def main():
         twin = rel[3:] if is_en else 'en/' + rel
         if page.lang != ('en' if is_en else 'zh-CN'):
             bad.append('%s：<html lang> 是 %s' % (rel, page.lang))
-        res = lambda href: os.path.relpath(os.path.normpath(os.path.join(base, href)), SITE) if href and not href.startswith('http') else href
+        def res(href):
+            """把一个地址化成相对站点根目录的文件路径。SITE_URL 填上之后 hreflang 是完整地址，去掉前面的域名再比。"""
+            if href and SITE_URL and href.startswith(SITE_URL):
+                tail = href[len(SITE_URL):]
+                return tail + 'index.html' if tail == '' or tail.endswith('/') else tail
+            return os.path.relpath(os.path.normpath(os.path.join(base, href)), SITE) if href and not href.startswith('http') else href
         want = {'zh-CN': rel[3:] if is_en else rel, 'en': rel if is_en else 'en/' + rel, 'x-default': rel[3:] if is_en else rel}
         for k, v in want.items():
             if res(page.alts.get(k)) != v:

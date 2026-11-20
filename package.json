@@ -35,5 +35,13 @@
     "check": "python3 tools/check_all.py --no-browser",
     "test": "python3 tools/check_all.py"
   },
-  "author": "Gavinwayne"
+  "author": "Gavinwayne",
+  "homepage": "https://hairline.gavinwayne.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsgavinwayne/hairline.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itsgavinwayne/hairline/issues"
+  }
 }
