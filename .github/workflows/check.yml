@@ -1,0 +1,25 @@
+# 每次推送和合并请求都跑一遍全部检查：令牌核对、生成、译稿、站点链接、行为测试、组件审计。
+name: 检查
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      # 组件审计量的是实际渲染出来的宽度和居中，机器上没有中文字体，结果就不作数。
+      - name: 装中文字体
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+      - name: 全部检查
+        run: python3 tools/check_all.py

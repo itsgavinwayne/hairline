@@ -1,0 +1,9 @@
+# 生成物：python3 build_site.py 会重建
+site/
+
+.DS_Store
+__pycache__/
+*.pyc
+
+# tools/shots.py 的输出，放这里就不会进仓库
+.shots/

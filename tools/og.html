@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>分享卡片</title>
+<!--
+  分享到社交平台时显示的那张图，1200×630。它是 Cover 的横版：同一幅月洞，同一个 48px 的模数放大到 105px。
+  改了这里之后重新出图（需要本机有 Chrome），再运行 python3 build_site.py：
+
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars --window-size=1200,630 --virtual-time-budget=8000 --screenshot=site-static/og.png tools/og.html
+-->
+<link rel="stylesheet" href="../dist/hairline.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; background: var(--hao-bg); color: var(--hao-ink); }
+  .art { position: absolute; top: 0; right: 0; width: 840px; height: 630px; display: block; }
+  .tint { fill: var(--hao-tint); }
+  .wash { fill: var(--hao-tint-wash); }
+  .deep { fill: var(--hao-ink); }
+  .ground { fill: var(--hao-bg); }
+  .text { position: absolute; left: 64px; bottom: 60px; width: 290px; }
+  .mark { display: block; width: 64px; height: 64px; margin-bottom: 28px; }
+  .mark path { fill: var(--hao-seal); }
+  .name { margin: 0; font: 500 76px/1 var(--hao-font-serif); letter-spacing: -0.02em; }
+  .tag { margin: 20px 0 0; font: 400 22px/32px var(--hao-font-sans); color: var(--hao-ink-secondary); }
+</style>
+</head>
+<body>
+<svg class="art" viewBox="96 0 384 288" aria-hidden="true">
+  <rect class="tint" x="96" y="0" width="192" height="288"/>
+  <rect class="deep" x="288" y="0" width="192" height="144"/>
+  <rect class="wash" x="288" y="144" width="192" height="144"/>
+  <circle class="ground" cx="192" cy="144" r="72"/>
+  <path class="wash" d="M312 144a72 72 0 0 1 144 0z"/>
+  <path class="deep" d="M312 144a72 72 0 0 0 144 0z"/>
+</svg>
+<div class="text">
+  <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path fill-rule="evenodd" d="M9 4H41a3 3 0 0 1 3 3V38a6 6 0 0 1-6 6H8a4 4 0 0 1-4-4V9a5 5 0 0 1 5-5zM13.300 26.500A11.500 11.500 0 1 1 34.700 26.500zM14.500 30h19a1.100 1.100 0 0 1 0 2.200h-19a1.100 1.100 0 0 1 0-2.200zM18.500 35.200h11a1.100 1.100 0 0 1 0 2.200h-11a1.100 1.100 0 0 1 0-2.200z"/></svg>
+  <h1 class="name" lang="en">Hairline</h1>
+  <p class="tag">iOS 的克制，<br>加上一点东方的气韵</p>
+</div>
+</body>
+</html>

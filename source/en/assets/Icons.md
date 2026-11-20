@@ -1,0 +1,1 @@
+39 line icons, 24px grid, 1.5px round-cap stroke, monochrome, with blue-black ink (#161b24). These files are for design mockups and documentation; in interfaces, use the style class `hao-icon hao-icon--name`, and it inherits the text color. See the `Icon` component for how to draw them and for the list.

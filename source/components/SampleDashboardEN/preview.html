@@ -1,0 +1,47 @@
+<!-- @dsCard group="示例" height=1040 width=1200 -->
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SampleDashboardEN</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap">
+<style>
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/24px var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .top { position: sticky; top: 0; z-index: var(--z-nav); background: var(--material); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-bottom: 1px solid var(--hairline); }
+  .barw { display: flex; align-items: center; gap: var(--space-8); min-height: 56px; }
+  .brand { display: inline-flex; align-items: center; gap: var(--space-2); font: 600 17px/24px var(--font-sans); color: var(--ink); text-decoration: none; }
+  .brand:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--radius-sm); }
+  .hao-tabs.links { flex: 1; box-shadow: none; align-self: stretch; }
+  .links .hao-tabs__item { min-height: 56px; }
+  .head { padding: var(--space-12) 0 var(--space-8); }
+  .head h1 { margin: 0; font: 700 32px/40px var(--font-serif); letter-spacing: -.015em; font-size: 34px; font-weight: 600; }
+  .head p { margin: var(--space-1) 0 0; font: 400 15px/24px var(--font-sans); color: var(--ink-secondary); }
+</style></head>
+<body class="">
+<header class="top"><div class="hao-page barw">
+  <a class="brand" href="#"><span class="hao-seal hao-seal--sm" role="img" aria-label="Seal" lang="zh">印</span>Product name</a>
+  <nav class="hao-tabs links" aria-label="Main"><a class="hao-tabs__item" href="#">Notes</a><a class="hao-tabs__item" href="#" aria-current="page">Review</a><a class="hao-tabs__item" href="#">Folders</a></nav>
+  <label class="hao-search" style="width:260px"><i class="hao-icon hao-icon--search" aria-hidden="true"></i><input type="search" placeholder="Search notes" aria-label="Search notes"></label>
+</div></header>
+<main class="hao-page" style="padding-bottom:var(--space-12)">
+  <div class="head"><h1>November review</h1><p>The tenth month of the Bingwu year, from Start of Winter (<span lang="zh">立冬</span>) to Minor Snow (<span lang="zh">小雪</span>)</p></div>
+  <div class="hao-grid">
+    <section class="hao-card" style="grid-column:span 8;display:flex;flex-wrap:wrap;gap:var(--space-5) var(--space-12);align-items:flex-start">
+      <div class="hao-stat"><span class="hao-stat__l">Notes this month</span><span class="hao-stat__v">31<small>notes</small></span><span class="hao-stat__n">6 more than last month</span></div>
+      <div class="hao-stat"><span class="hao-stat__l">Total words</span><span class="hao-stat__v">48,260<small>words</small></span></div>
+      <div class="hao-stat"><span class="hao-stat__l">Current streak</span><span class="hao-stat__v">12<small>days</small></span><span class="hao-stat__n">Longest: 27 days</span></div>
+    </section>
+    <section class="hao-card" style="grid-column:span 4"><h2 class="hao-card__title">This week</h2><div class="hao-row" style="gap:var(--space-2)"><span class="hao-moon hao-moon--done" style="--p:1" role="img" aria-label="Monday, done"></span><span class="hao-moon hao-moon--done" style="--p:1" role="img" aria-label="Tuesday, done"></span><span class="hao-moon" style="--p:0.6" role="img" aria-label="Wednesday, half done"></span><span class="hao-moon" style="--p:0" role="img" aria-label="Thursday"></span><span class="hao-moon" style="--p:0" role="img" aria-label="Friday"></span><span class="hao-moon" style="--p:0" role="img" aria-label="Saturday"></span><span class="hao-moon" style="--p:0" role="img" aria-label="Sunday"></span></div><p class="hao-card__meta">Weekly goal 5 notes, 2 and a half done</p></section>
+    <section style="grid-column:span 8">
+      <div class="hao-table-wrap"><table class="hao-table">
+        <thead><tr><th scope="col">Title</th><th scope="col">Folder</th><th scope="col">Status</th><th scope="col" class="hao-num">Words</th><th scope="col">Last edited</th></tr></thead>
+        <tbody>
+          <tr><td>Morning note</td><td class="hao-muted">Essays</td><td><span class="hao-tag hao-tag--jade">Published</span></td><td class="hao-num">486</td><td class="hao-muted">Today, 7:12 AM</td></tr>
+          <tr><td>Notes on The Craft of Gardens</td><td class="hao-muted">Reading</td><td><span class="hao-tag hao-tag--tint">In progress</span></td><td class="hao-num">2,140</td><td class="hao-muted">Yesterday</td></tr>
+          <tr><td>Three days in Suzhou</td><td class="hao-muted">Travel</td><td><span class="hao-tag">Draft</span></td><td class="hao-num">912</td><td class="hao-muted">Nov 12</td></tr>
+          <tr><td>First rain of winter</td><td class="hao-muted">Essays</td><td><span class="hao-tag hao-tag--jade">Published</span></td><td class="hao-num">327</td><td class="hao-muted">Nov 9</td></tr>
+        </tbody></table></div>
+      <nav aria-label="Pagination" style="margin-top:var(--space-4);display:flex;justify-content:flex-end"><ul class="hao-pages"><li><a class="hao-pages__item" href="#" aria-label="Previous page" aria-disabled="true"><i class="hao-icon hao-icon--chevron-left" aria-hidden="true"></i></a></li><li><a class="hao-pages__item" href="#" aria-current="page">1</a></li><li><a class="hao-pages__item" href="#">2</a></li><li><a class="hao-pages__item" href="#">3</a></li><li><a class="hao-pages__item" href="#" aria-label="Next page"><i class="hao-icon hao-icon--chevron-right" aria-hidden="true"></i></a></li></ul></nav>
+    </section>
+    <aside style="grid-column:span 4"><div class="hao-cal" style="width:100%"><div class="hao-cal__head"><h2 class="hao-cal__title">November</h2></div><div class="hao-cal__grid"><span class="hao-cal__dow">M</span><span class="hao-cal__dow">T</span><span class="hao-cal__dow">W</span><span class="hao-cal__dow">T</span><span class="hao-cal__dow">F</span><span class="hao-cal__dow">S</span><span class="hao-cal__dow">S</span><button class="hao-cal__day hao-cal__day--out">26</button><button class="hao-cal__day hao-cal__day--out">27</button><button class="hao-cal__day hao-cal__day--out">28</button><button class="hao-cal__day hao-cal__day--out">29</button><button class="hao-cal__day hao-cal__day--out">30</button><button class="hao-cal__day hao-cal__day--out">31</button><button class="hao-cal__day">1</button><button class="hao-cal__day">2</button><button class="hao-cal__day">3</button><button class="hao-cal__day">4</button><button class="hao-cal__day">5</button><button class="hao-cal__day">6</button><button class="hao-cal__day">7<small class="hao-cal__dot"></small></button><button class="hao-cal__day">8</button><button class="hao-cal__day">9</button><button class="hao-cal__day">10</button><button class="hao-cal__day">11</button><button class="hao-cal__day">12</button><button class="hao-cal__day">13</button><button class="hao-cal__day">14</button><button class="hao-cal__day">15</button><button class="hao-cal__day">16</button><button class="hao-cal__day">17</button><button class="hao-cal__day" aria-current="date">18</button><button class="hao-cal__day">19</button><button class="hao-cal__day">20</button><button class="hao-cal__day">21</button><button class="hao-cal__day">22<small class="hao-cal__dot"></small></button><button class="hao-cal__day">23</button><button class="hao-cal__day">24</button><button class="hao-cal__day">25</button><button class="hao-cal__day">26</button><button class="hao-cal__day">27</button><button class="hao-cal__day">28</button><button class="hao-cal__day">29</button><button class="hao-cal__day">30</button></div><p class="hao-cal__foot"><span><i></i>Nov 7, Start of Winter</span><span><i></i>Nov 22, Minor Snow</span></p></div></aside>
+  </div>
+</main>
+</body>
+</html>

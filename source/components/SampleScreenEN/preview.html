@@ -1,0 +1,56 @@
+<!-- @dsCard group="示例" height=800 -->
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SampleScreenEN</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap">
+<style>
+  body.hao-stage { display: grid; place-items: center; }
+  .phone { position: relative; width: 390px; max-width: 100%; height: 752px; border-radius: 44px; border: 1px solid var(--hairline); background: var(--bg); overflow: hidden; box-shadow: var(--shadow-float); }
+  .scroll { height: 100%; overflow: auto; box-sizing: border-box; padding: var(--space-12) var(--space-4) 104px; display: flex; flex-direction: column; gap: var(--space-6); }
+  .scroll > * { flex: none; }
+  .top { display: flex; align-items: flex-end; justify-content: space-between; margin-top: var(--space-4); }
+  .date { margin: 0 0 var(--space-1); font: 400 13px/20px var(--font-sans); color: var(--ink-tertiary); }
+  .big { margin: 0; font: 700 32px/40px var(--font-serif); letter-spacing: -.015em; font-size: 34px; font-weight: 600; }
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; display: flex; padding: var(--space-2) var(--space-4) var(--space-6); background: var(--material); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-top: 1px solid var(--hairline); }
+  .tabs a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 44px; font: 500 12px/16px var(--font-sans); color: var(--ink-tertiary); text-decoration: none; }
+  .tabs a.on { color: var(--tint); }
+  .tabs svg { width: 24px; height: 24px; }
+  .tabs a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+</style></head>
+<body class="hao-stage">
+<div class="phone">
+  <div class="scroll">
+    <header class="top">
+      <div>
+        <p class="date">Wednesday, November 18</p>
+        <h1 class="big">Today</h1>
+      </div>
+      <span class="hao-seal" role="img" aria-label="Seal" lang="zh">印</span>
+    </header>
+    <div class="hao-seg" role="radiogroup" aria-label="Range" style="display:flex">
+      <label style="flex:1"><input type="radio" name="s" checked><span>Today</span></label>
+      <label style="flex:1"><input type="radio" name="s"><span>This week</span></label>
+      <label style="flex:1"><input type="radio" name="s"><span>All</span></label>
+    </div>
+    <div class="hao-card hao-card--wave">
+      <h2 class="hao-card__title">Morning note</h2>
+      <p class="hao-card__body">Fog outside the window. Write down the three things that matter today, and let the rest wait.</p>
+      <p class="hao-card__meta hao-sign hao-sign--row" style="display:flex;justify-content:space-between"><span>Today, 7:12 AM</span><span class="hao-colophon">Winter, the Bingwu year</span></p>
+    </div>
+    <button class="hao-btn hao-btn--block">Write a note</button>
+    <div>
+      <p class="hao-list-header">To do</p>
+      <ul class="hao-list">
+        <li><a class="hao-list__row" href="#"><span class="hao-list__title">Tidy the design tokens</span><span class="hao-tag hao-tag--tint">In progress</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+        <li><a class="hao-list__row" href="#"><span class="hao-list__title">Reply to the publisher</span><span class="hao-tag hao-tag--amber">Due today</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+        <li><a class="hao-list__row" href="#"><span class="hao-list__title">Evening walk</span><span class="hao-tag hao-tag--jade">Done</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="Main">
+    <a href="#" class="on" aria-current="page"><i class="hao-icon hao-icon--today" aria-hidden="true"></i>Today</a>
+    <a href="#"><i class="hao-icon hao-icon--notes" aria-hidden="true"></i>Notes</a>
+    <a href="#"><i class="hao-icon hao-icon--person" aria-hidden="true"></i>Me</a>
+  </nav>
+</div>
+</body>
+</html>

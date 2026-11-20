@@ -1,0 +1,27 @@
+<!-- @dsCard group="示例" height=860 -->
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SampleFormEN</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap"><style>
+  body { margin: 0; padding: var(--space-5); display: grid; place-items: center; background: var(--bg); color: var(--ink); font: 400 17px/24px var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .phone { position: relative; width: 390px; max-width: 100%; height: 800px; border-radius: 44px; border: 1px solid var(--hairline); background: var(--bg); overflow: hidden; box-shadow: var(--shadow-float); }
+  .scroll { height: 100%; overflow: auto; box-sizing: border-box; padding: var(--space-12) var(--space-4) 104px; display: flex; flex-direction: column; gap: var(--space-6); }
+  .scroll > * { flex: none; }
+  /* 机身只有 390 宽，但窄屏规则看的是窗口宽度，这里照窄屏的间距收一下，英文的三步才放得进页边距 */
+  .phone .hao-steps { gap: var(--space-2); }
+  .phone .hao-steps li + li::before { width: var(--space-4); margin-right: var(--space-2); }
+  .bar { position: absolute; left: 0; right: 0; top: 0; z-index: 2; padding-top: var(--space-8); }
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; }
+</style></head>
+<body class="">
+<div class="phone">
+  <header class="hao-nav bar"><div class="hao-nav__bar"><button class="hao-nav__action">Cancel</button><h1 class="hao-nav__title">Export note</h1><span></span></div></header>
+  <div class="scroll" style="padding-top:104px">
+    <ol class="hao-steps" style="justify-content:center"><li class="hao-steps__item--done"><span class="hao-steps__n" aria-hidden="true">1</span>Content</li><li aria-current="step"><span class="hao-steps__n" aria-hidden="true">2</span>Format</li><li><span class="hao-steps__n" aria-hidden="true">3</span>Export</li></ol>
+    <div class="hao-field"><label class="hao-field__label" for="fn">File name</label><input class="hao-field__input" id="fn" value="November note"><span class="hao-field__foot"><span class="hao-field__hint">Don’t add the extension</span><span class="hao-field__count">13 / 20</span></span></div>
+    <div class="hao-field"><label class="hao-field__label" for="ff">Format</label><span class="hao-select"><select id="ff"><option>PDF</option><option>Plain text</option><option>Web page</option></select></span></div>
+    <fieldset class="hao-choices"><legend>Include</legend><label class="hao-check"><input type="checkbox" checked> Images</label><label class="hao-check"><input type="checkbox" checked> Signature and seal</label><label class="hao-check"><input type="checkbox"> Draft</label></fieldset>
+    <div class="hao-upload" style="padding:var(--space-5)"><strong>Cover image</strong><span>Optional, JPG or PNG</span><button class="hao-btn hao-btn--sm hao-btn--tinted">Choose image</button></div>
+    <button class="hao-btn hao-btn--block">Next</button>
+  </div></div>
+</body>
+</html>

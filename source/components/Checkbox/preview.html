@@ -1,0 +1,29 @@
+<!-- @dsCard group="表单" height=560 -->
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>Checkbox</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap"></head>
+<body class="hao-stage">
+<div class="hao-bi">
+<section lang="zh-CN">
+<p class="hao-bi__tag">中文</p>
+<fieldset class="hao-choices">
+  <legend>每周回顾里包含</legend>
+  <label class="hao-check"><input type="checkbox" data-hao-checkall="rev-zh"> 全选</label>
+  <label class="hao-check"><input type="checkbox" name="rev-zh" checked> 已完成的待办</label>
+  <label class="hao-check"><input type="checkbox" name="rev-zh"> 本周写的札记</label>
+  <label class="hao-check"><input type="checkbox" disabled> 阅读时长（需要先开启统计）</label>
+</fieldset>
+</section>
+<section lang="en">
+<p class="hao-bi__tag">English</p>
+<fieldset class="hao-choices">
+  <legend>Include in the weekly review</legend>
+  <label class="hao-check"><input type="checkbox" data-hao-checkall="rev-en"> Select all</label>
+  <label class="hao-check"><input type="checkbox" name="rev-en" checked> Completed to-dos</label>
+  <label class="hao-check"><input type="checkbox" name="rev-en"> Notes written this week</label>
+  <label class="hao-check"><input type="checkbox" disabled> Reading time (turn on tracking first)</label>
+</fieldset>
+</section>
+</div>
+</body>
+</html>

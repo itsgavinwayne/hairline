@@ -1,0 +1,56 @@
+<!-- @dsCard group="示例" height=800 -->
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>SampleScreen</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap">
+<style>
+  body.hao-stage { display: grid; place-items: center; }
+  .phone { position: relative; width: 390px; max-width: 100%; height: 752px; border-radius: 44px; border: 1px solid var(--hairline); background: var(--bg); overflow: hidden; box-shadow: var(--shadow-float); }
+  .scroll { height: 100%; overflow: auto; box-sizing: border-box; padding: var(--space-12) var(--space-4) 104px; display: flex; flex-direction: column; gap: var(--space-6); }
+  .scroll > * { flex: none; }
+  .top { display: flex; align-items: flex-end; justify-content: space-between; margin-top: var(--space-4); }
+  .date { margin: 0 0 var(--space-1); font: 400 13px/20px var(--font-sans); color: var(--ink-tertiary); }
+  .big { margin: 0; font: 700 32px/40px var(--font-serif); letter-spacing: .02em; }
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; display: flex; padding: var(--space-2) var(--space-4) var(--space-6); background: var(--material); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-top: 1px solid var(--hairline); }
+  .tabs a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 44px; font: 500 12px/16px var(--font-sans); color: var(--ink-tertiary); text-decoration: none; }
+  .tabs a.on { color: var(--tint); }
+  .tabs svg { width: 24px; height: 24px; }
+  .tabs a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+</style></head>
+<body class="hao-stage">
+<div class="phone">
+  <div class="scroll">
+    <header class="top">
+      <div>
+        <p class="date">11 月 18 日 星期三</p>
+        <h1 class="big">今日</h1>
+      </div>
+      <span class="hao-sign"><span class="hao-slip">丙午冬</span><span class="hao-seal hao-seal--sm" role="img" aria-label="印章">印</span></span>
+    </header>
+    <div class="hao-seg" role="radiogroup" aria-label="范围" style="display:flex">
+      <label style="flex:1"><input type="radio" name="s" checked><span>今日</span></label>
+      <label style="flex:1"><input type="radio" name="s"><span>本周</span></label>
+      <label style="flex:1"><input type="radio" name="s"><span>全部</span></label>
+    </div>
+    <div class="hao-card hao-card--wave">
+      <h2 class="hao-card__title">晨间札记</h2>
+      <p class="hao-card__body">窗外起了薄雾。把今天要做的三件事写下来，其余的先放一放。</p>
+      <p class="hao-card__meta">今天 07:12</p>
+    </div>
+    <button class="hao-btn hao-btn--block">写一条札记</button>
+    <div>
+      <p class="hao-list-header">待办</p>
+      <ul class="hao-list">
+        <li><a class="hao-list__row" href="#"><span class="hao-list__title">整理设计令牌</span><span class="hao-tag hao-tag--tint">进行中</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+        <li><a class="hao-list__row" href="#"><span class="hao-list__title">回复出版社邮件</span><span class="hao-tag hao-tag--amber">今天到期</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+        <li><a class="hao-list__row" href="#"><span class="hao-list__title">晚间散步</span><span class="hao-tag hao-tag--jade">已完成</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+      </ul>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="主导航">
+    <a href="#" class="on" aria-current="page"><i class="hao-icon hao-icon--today" aria-hidden="true"></i>今日</a>
+    <a href="#"><i class="hao-icon hao-icon--notes" aria-hidden="true"></i>札记</a>
+    <a href="#"><i class="hao-icon hao-icon--person" aria-hidden="true"></i>我的</a>
+  </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Quote · 引文
+
+引一句别人的话，用一对角标框起来，取自中文引号「」的形。
+
+`<blockquote class="hao-quote">`，里面一个 `<p>` 和可选的 `<cite>`。文字由你提供。
+
+- 两种刻法，和印章的朱文、白文是一个道理：默认是阳文，浅底深字，只有一对角标；加 `hao-quote--yin` 是阴文，整块填上 `ink`，字反白。阳文用在正文里，阴文用在要压住版面的地方（海报、封面、文章的结尾）。一屏里只用一种。
+- 阴文跟着主题反过来：昼间是墨底白字，夜间是一整块亮底深字，是这一屏里最亮的一块。这是有意的，它本来就是用来压住版面的；夜间不想这么亮就用阳文。
+- 引文用宋体 `title-2` 的字号，出处用 `footnote`。
+- 一到三行。更长的引用用普通正文缩进，不用这个。
+- 一屏一处。它已经很显眼，周围多留白，不再配纹样。
+- 出处写「作者《书名》」，英文写 “Author, Title”。
+- 例子里这句话出自明代计成的《园冶》。
+- 英文界面里角标换成一个悬挂在左上的开引号，正文相应右移；引文本身不再加引号。
+
+**无障碍**
+
+- 用真的 `<blockquote>`，读屏知道这段话是引来的；出处写在 `<cite>` 里，一并读出。
+- 中文角标和英文的悬挂引号都是伪元素画的，读屏不会把图形念出来，引文原样读。
+
+## 标记
+
+### 中文
+
+```html
+<blockquote class="hao-quote" style="max-width:460px"><p>虽由人作，宛自天开。</p><cite>计成《园冶》</cite></blockquote>
+<blockquote class="hao-quote hao-quote--yin" style="max-width:460px;margin-top:var(--hao-space-6)"><p>纸上最要紧的，是没画的地方。</p><cite>《雾里的早晨》</cite></blockquote>
+```
+
+### English
+
+```html
+<blockquote class="hao-quote" style="max-width:460px"><p>Though made by human hands, it seems the work of nature.</p><cite>Ji Cheng, The Craft of Gardens</cite></blockquote>
+<blockquote class="hao-quote hao-quote--yin" style="max-width:460px;margin-top:var(--hao-space-6)"><p>The most important part of the paper is the part left unpainted.</p><cite>A morning in fog</cite></blockquote>
+```

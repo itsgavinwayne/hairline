@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>字号对比 · 一栏</title>
+<!--
+  tests/type-scale.html 里每一栏装的就是这一页。参数：
+    scale=now|rec|alt   现在（now.css 快照）、推荐（dist/hairline.css）、备选（now.css + alt.css）
+    sample=screen|article|form|data|cover
+    lang=zh|en   theme=light|dark
+  内容全部用系统自己的组件和字体样式类，这一页不写任何字号。
+-->
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var scale = q.get('scale') || 'rec';
+  window.__q = { scale: scale, sample: q.get('sample') || 'screen', lang: q.get('lang') || 'zh', theme: q.get('theme') || 'light' };
+  document.documentElement.dataset.theme = window.__q.theme;
+  document.documentElement.lang = window.__q.lang === 'en' ? 'en' : 'zh-CN';
+  var css = scale === 'rec' ? ['../../dist/hairline.css'] : scale === 'alt' ? ['now.css', 'alt.css'] : ['now.css'];
+  css.forEach(function (href) { document.write('<link rel="stylesheet" href="' + href + '">'); });
+})();
+</script>
+<style>
+  html, body { margin: 0; }
+  body { background: var(--hao-bg); color: var(--hao-ink); -webkit-font-smoothing: antialiased; }
+  .x { box-sizing: border-box; padding: var(--hao-space-6) var(--hao-space-4); display: flex; flex-direction: column; gap: var(--hao-space-6); }
+  .x > * { flex: none; }
+  .x--paper { padding: 0; background: var(--hao-surface); }
+  .x-top { display: flex; align-items: flex-end; justify-content: space-between; }
+  .x-top p, .x-top h1, .x-head h1, .x-head p { margin: 0; }
+  .x-date { color: var(--hao-ink-tertiary); margin-bottom: var(--hao-space-1); }
+  .x-head p { margin-top: var(--hao-space-1); color: var(--hao-ink-secondary); }
+  .x-stats { display: flex; flex-wrap: wrap; gap: var(--hao-space-5) var(--hao-space-8); align-items: flex-start; }
+  .x-row { display: flex; align-items: center; gap: var(--hao-space-5); flex-wrap: wrap; }
+  .x-cover { padding: var(--hao-space-12) var(--hao-space-6); gap: var(--hao-space-4); }
+  .x-cover h1, .x-cover p { margin: 0; }
+  .x-cover p { color: var(--hao-ink-secondary); max-width: 30em; }
+  .x-cover h1 { text-wrap: balance; }
+</style>
+</head>
+<body class="hao-stage" style="padding:0">
+
+<template id="screen-zh">
+<div class="x">
+  <header class="x-top">
+    <div><p class="x-date hao-footnote">11 月 18 日 星期三</p><h1 class="hao-title-1">今日</h1></div>
+    <span class="hao-sign"><span class="hao-slip">丙午冬</span><span class="hao-seal hao-seal--sm" role="img" aria-label="印章">印</span></span>
+  </header>
+  <div class="hao-seg" role="radiogroup" aria-label="范围" style="display:flex">
+    <label style="flex:1"><input type="radio" name="s" checked><span>今日</span></label>
+    <label style="flex:1"><input type="radio" name="s"><span>本周</span></label>
+    <label style="flex:1"><input type="radio" name="s"><span>全部</span></label>
+  </div>
+  <div class="hao-card">
+    <h2 class="hao-card__title">晨间札记</h2>
+    <p class="hao-card__body">窗外起了薄雾。把今天要做的三件事写下来，其余的先放一放。</p>
+    <p class="hao-card__meta">今天 07:12</p>
+  </div>
+  <div>
+    <p class="hao-list-header">待办</p>
+    <ul class="hao-list">
+      <li><a class="hao-list__row" href="#"><span class="hao-list__title">整理设计令牌<span class="hao-list__sub">字号阶梯还差一轮核对</span></span><span class="hao-tag hao-tag--tint">进行中</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+      <li><a class="hao-list__row" href="#"><span class="hao-list__title">回复出版社邮件</span><span class="hao-tag hao-tag--amber">今天到期</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+      <li><a class="hao-list__row" href="#"><span class="hao-list__title">晚间散步</span><span class="hao-tag hao-tag--jade">已完成</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+    </ul>
+    <p class="hao-list-footer">做完的事留到明天早上再清，今天先看着它们。</p>
+  </div>
+  <button class="hao-btn hao-btn--block">写一条札记</button>
+</div>
+</template>
+
+<template id="screen-en">
+<div class="x">
+  <header class="x-top">
+    <div><p class="x-date hao-footnote">Wednesday, November 18</p><h1 class="hao-title-1">Today</h1></div>
+    <span class="hao-seal" role="img" aria-label="Seal" lang="zh">印</span>
+  </header>
+  <div class="hao-seg" role="radiogroup" aria-label="Range" style="display:flex">
+    <label style="flex:1"><input type="radio" name="s" checked><span>Today</span></label>
+    <label style="flex:1"><input type="radio" name="s"><span>This week</span></label>
+    <label style="flex:1"><input type="radio" name="s"><span>All</span></label>
+  </div>
+  <div class="hao-card">
+    <h2 class="hao-card__title">Morning note</h2>
+    <p class="hao-card__body">Fog outside the window. Write down the three things that matter today, and let the rest wait.</p>
+    <p class="hao-card__meta">Today, 7:12 AM</p>
+  </div>
+  <div>
+    <p class="hao-list-header">To do</p>
+    <ul class="hao-list">
+      <li><a class="hao-list__row" href="#"><span class="hao-list__title">Tidy the design tokens<span class="hao-list__sub">The type scale needs one more pass</span></span><span class="hao-tag hao-tag--tint">In progress</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+      <li><a class="hao-list__row" href="#"><span class="hao-list__title">Reply to the publisher</span><span class="hao-tag hao-tag--amber">Due today</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+      <li><a class="hao-list__row" href="#"><span class="hao-list__title">Evening walk</span><span class="hao-tag hao-tag--jade">Done</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+    </ul>
+    <p class="hao-list-footer">Finished items stay until tomorrow morning. Today, just look at them.</p>
+  </div>
+  <button class="hao-btn hao-btn--block">Write a note</button>
+</div>
+</template>
+
+<template id="article-zh">
+<div class="x x--paper">
+  <article class="hao-prose" style="padding-top:var(--hao-space-8)">
+    <h1>雾里的早晨</h1>
+    <p class="hao-prose__meta">丙午年 小雪前四日</p>
+    <p>早上推开窗，对面的楼只剩一个淡淡的轮廓。雾把远处的东西都收走了，只留下眼前这一小块：窗台、一盆文竹、一杯刚倒的水。</p>
+    <h2>近处</h2>
+    <p>平时总觉得要看得远才算看清楚。今天看不远，反倒把近处的东西看了个仔细。</p>
+    <h3 class="x-h3">窗台上的三样东西</h3>
+    <p>文竹的叶子细得像一层烟，杯口的水汽和窗外的雾接在一起，分不出哪一边是屋里。</p>
+    <blockquote class="hao-quote"><p>虽由人作，宛自天开。</p><cite>计成《园冶》</cite></blockquote>
+    <p>画山水的人说，纸上最要紧的是没画的地方。雾大概就是天地自己留的白。</p>
+    <div class="hao-prose__sign"><span class="hao-sign"><span class="hao-slip">丙午冬</span><span class="hao-seal hao-seal--sm hao-seal--outline" aria-hidden="true">印</span></span></div>
+  </article>
+</div>
+</template>
+
+<template id="article-en">
+<div class="x x--paper">
+  <article class="hao-prose" style="padding-top:var(--hao-space-8)">
+    <h1>A foggy morning</h1>
+    <p class="hao-prose__meta">Four days before Minor Snow (<span lang="zh">小雪</span>), the Bingwu year</p>
+    <p>I opened the window this morning and the building across the way was only a faint outline. The fog had taken everything far off, leaving just this small patch in front of me.</p>
+    <h2>What is near</h2>
+    <p>Most days I feel that seeing far is what it means to see clearly. Today I couldn’t see far, and so I looked closely at what was near.</p>
+    <h3 class="x-h3">Three things on the windowsill</h3>
+    <p>The fern’s leaves are fine as smoke, and the steam from the glass joins the fog outside until I can’t tell which side is indoors.</p>
+    <blockquote class="hao-quote"><p>Though made by human hands, it seems to come from heaven.</p><cite>Ji Cheng, The Craft of Gardens</cite></blockquote>
+    <p>Landscape painters say the most important part of the paper is the place left unpainted. Fog is probably the blank the world leaves for itself.</p>
+    <div class="hao-prose__sign"><span class="hao-sign"><span class="hao-colophon">Winter, the Bingwu year</span><span class="hao-seal hao-seal--sm hao-seal--outline" lang="zh" aria-hidden="true">印</span></span></div>
+  </article>
+</div>
+</template>
+
+<template id="form-zh">
+<div class="x">
+  <header class="hao-nav" style="margin:calc(var(--hao-space-6) * -1) calc(var(--hao-space-4) * -1) 0"><div class="hao-nav__bar"><button class="hao-nav__action">取消</button><h1 class="hao-nav__title">导出札记</h1><span></span></div></header>
+  <ol class="hao-steps" style="justify-content:center"><li class="hao-steps__item--done"><span class="hao-steps__n" aria-hidden="true">一</span>内容</li><li aria-current="step"><span class="hao-steps__n" aria-hidden="true">二</span>格式</li><li><span class="hao-steps__n" aria-hidden="true">三</span>导出</li></ol>
+  <div class="hao-field"><label class="hao-field__label" for="fn">文件名</label><input class="hao-field__input" id="fn" value="十一月札记"><span class="hao-field__foot"><span class="hao-field__hint">不用写扩展名</span><span class="hao-field__count">5 / 20</span></span></div>
+  <div class="hao-field"><label class="hao-field__label" for="fm">附言</label><textarea class="hao-field__input" id="fm">这一个月写得不多，挑了十二篇。排好之后先发我看一眼，再送去印。</textarea></div>
+  <div class="hao-field"><label class="hao-field__label" for="ff">格式</label><span class="hao-select"><select id="ff"><option>PDF</option><option>纯文本</option></select></span></div>
+  <fieldset class="hao-choices"><legend>包含</legend><label class="hao-check"><input type="checkbox" checked> 图片</label><label class="hao-check"><input type="checkbox" checked> 落款与印章</label></fieldset>
+  <div class="hao-banner"><i class="hao-icon hao-icon--sm hao-icon--info" aria-hidden="true"></i><span><strong>导出要一两分钟</strong>图片多的时候会更久一些，可以先去做别的事，好了会提醒你。</span></div>
+  <div class="x-row"><button class="hao-btn">下一步</button><button class="hao-btn hao-btn--tinted">存为草稿</button><button class="hao-btn hao-btn--sm hao-btn--tinted">选择图片</button></div>
+</div>
+</template>
+
+<template id="form-en">
+<div class="x">
+  <header class="hao-nav" style="margin:calc(var(--hao-space-6) * -1) calc(var(--hao-space-4) * -1) 0"><div class="hao-nav__bar"><button class="hao-nav__action">Cancel</button><h1 class="hao-nav__title">Export note</h1><span></span></div></header>
+  <ol class="hao-steps" style="justify-content:center"><li class="hao-steps__item--done"><span class="hao-steps__n" aria-hidden="true">1</span>Content</li><li aria-current="step"><span class="hao-steps__n" aria-hidden="true">2</span>Format</li><li><span class="hao-steps__n" aria-hidden="true">3</span>Export</li></ol>
+  <div class="hao-field"><label class="hao-field__label" for="fn">File name</label><input class="hao-field__input" id="fn" value="November note"><span class="hao-field__foot"><span class="hao-field__hint">Don’t add the extension</span><span class="hao-field__count">13 / 20</span></span></div>
+  <div class="hao-field"><label class="hao-field__label" for="fm">Message</label><textarea class="hao-field__input" id="fm">Not much written this month, so I picked twelve. Send me a proof before it goes to print.</textarea></div>
+  <div class="hao-field"><label class="hao-field__label" for="ff">Format</label><span class="hao-select"><select id="ff"><option>PDF</option><option>Plain text</option></select></span></div>
+  <fieldset class="hao-choices"><legend>Include</legend><label class="hao-check"><input type="checkbox" checked> Images</label><label class="hao-check"><input type="checkbox" checked> Signature and seal</label></fieldset>
+  <div class="hao-banner"><i class="hao-icon hao-icon--sm hao-icon--info" aria-hidden="true"></i><span><strong>Export takes a minute or two</strong>Longer with many images. You can do something else in the meantime; you’ll get a reminder when it’s ready.</span></div>
+  <div class="x-row"><button class="hao-btn">Next</button><button class="hao-btn hao-btn--tinted">Save draft</button><button class="hao-btn hao-btn--sm hao-btn--tinted">Choose image</button></div>
+</div>
+</template>
+
+<template id="data-zh">
+<div class="x">
+  <div class="x-head"><h1 class="hao-title-1">十一月回顾</h1><p class="hao-callout">丙午年十月，立冬到小雪</p></div>
+  <section class="hao-card x-stats">
+    <div class="hao-stat"><span class="hao-stat__l">本月札记</span><span class="hao-stat__v">31<small>条</small></span><span class="hao-stat__n">比上月多 6 条</span></div>
+    <div class="hao-stat"><span class="hao-stat__l">累计字数</span><span class="hao-stat__v">48,260<small>字</small></span></div>
+  </section>
+  <div class="hao-table-wrap"><table class="hao-table">
+    <thead><tr><th scope="col">标题</th><th scope="col">状态</th><th scope="col" class="hao-num">字数</th></tr></thead>
+    <tbody>
+      <tr><td>晨间札记</td><td><span class="hao-tag hao-tag--jade">已发布</span></td><td class="hao-num">486</td></tr>
+      <tr><td>《园冶》读书笔记</td><td><span class="hao-tag hao-tag--tint">进行中</span></td><td class="hao-num">2,140</td></tr>
+      <tr><td>苏州三日</td><td><span class="hao-tag">草稿</span></td><td class="hao-num">912</td></tr>
+    </tbody></table></div>
+  <div class="x-row" style="justify-content:space-between">
+    <span class="hao-date" role="img" aria-label="11 月 18 日，星期三"><span class="hao-date__m">十一月</span><span class="hao-date__d">18</span><span class="hao-date__w">周三</span></span>
+    <ul class="hao-pages"><li><a class="hao-pages__item" href="#" aria-current="page">1</a></li><li><a class="hao-pages__item" href="#">2</a></li><li><a class="hao-pages__item" href="#">3</a></li></ul>
+  </div>
+  <section class="hao-card"><h2 class="hao-card__title">本周</h2><p class="hao-card__body">写了 3 条，共 1,725 字。</p><p class="hao-card__meta">周目标 5 条，已完成 3 条</p></section>
+</div>
+</template>
+
+<template id="data-en">
+<div class="x">
+  <div class="x-head"><h1 class="hao-title-1">November review</h1><p class="hao-callout">The tenth month of the Bingwu year</p></div>
+  <section class="hao-card x-stats">
+    <div class="hao-stat"><span class="hao-stat__l">Notes this month</span><span class="hao-stat__v">31<small>notes</small></span><span class="hao-stat__n">6 more than last month</span></div>
+    <div class="hao-stat"><span class="hao-stat__l">Total words</span><span class="hao-stat__v">48,260<small>words</small></span></div>
+  </section>
+  <div class="hao-table-wrap"><table class="hao-table">
+    <thead><tr><th scope="col">Title</th><th scope="col">Status</th><th scope="col" class="hao-num">Words</th></tr></thead>
+    <tbody>
+      <tr><td>Morning note</td><td><span class="hao-tag hao-tag--jade">Published</span></td><td class="hao-num">486</td></tr>
+      <tr><td>The Craft of Gardens</td><td><span class="hao-tag hao-tag--tint">In progress</span></td><td class="hao-num">2,140</td></tr>
+      <tr><td>Three days in Suzhou</td><td><span class="hao-tag">Draft</span></td><td class="hao-num">912</td></tr>
+    </tbody></table></div>
+  <div class="x-row" style="justify-content:space-between">
+    <span class="hao-date" role="img" aria-label="Wednesday, November 18"><span class="hao-date__m">Nov</span><span class="hao-date__d">18</span><span class="hao-date__w">Wed</span></span>
+    <ul class="hao-pages"><li><a class="hao-pages__item" href="#" aria-current="page">1</a></li><li><a class="hao-pages__item" href="#">2</a></li><li><a class="hao-pages__item" href="#">3</a></li></ul>
+  </div>
+  <section class="hao-card"><h2 class="hao-card__title">This week</h2><p class="hao-card__body">3 notes written, 1,725 words in all.</p><p class="hao-card__meta">Weekly goal 5 notes, 3 done</p></section>
+</div>
+</template>
+
+<template id="cover-zh">
+<div class="x x-cover">
+  <h1 class="hao-display">留白处，自有山水</h1>
+  <p class="hao-body">一套给中文界面用的设计系统：结构照 iOS 的规矩，标题用宋体，颜色取自石青与朱砂。</p>
+  <div class="x-row"><button class="hao-btn">开始使用</button><button class="hao-btn hao-btn--plain">浏览组件</button></div>
+</div>
+</template>
+
+<template id="cover-en">
+<div class="x x-cover">
+  <h1 class="hao-display">Leave room, then write</h1>
+  <p class="hao-body">A design system for quiet interfaces: structure by the rules of iOS, titles in a serif, color from azurite and cinnabar.</p>
+  <div class="x-row"><button class="hao-btn">Get started</button><button class="hao-btn hao-btn--plain">Browse components</button></div>
+</div>
+</template>
+
+<script>
+(function () {
+  var q = window.__q;
+  var t = document.getElementById(q.sample + '-' + q.lang);
+  document.body.appendChild(t.content.cloneNode(true));
+  /* 「现在」没有第三级标题：今天只能拿 headline 顶上，照实摆出来 */
+  if (q.scale === 'now') {
+    document.querySelectorAll('.x-h3').forEach(function (h) { h.classList.add('hao-headline'); h.style.margin = 'var(--hao-space-6) 0 var(--hao-space-2)'; });
+  }
+  function tell() { parent.postMessage({ typeScaleFrame: location.search, height: Math.ceil(document.body.getBoundingClientRect().height) + 1 }, '*'); }
+  window.addEventListener('load', tell);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(tell);
+  window.addEventListener('resize', tell);
+  if (window.ResizeObserver) new ResizeObserver(tell).observe(document.body);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- @dsCard group="示例" height=860 -->
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>SampleSettings</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap"><style>
+  body { margin: 0; padding: var(--space-5); display: grid; place-items: center; background: var(--bg); color: var(--ink); font: 400 17px/28px var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .phone { position: relative; width: 390px; max-width: 100%; height: 800px; border-radius: 44px; border: 1px solid var(--hairline); background: var(--bg); overflow: hidden; box-shadow: var(--shadow-float); }
+  .scroll { height: 100%; overflow: auto; box-sizing: border-box; padding: var(--space-12) var(--space-4) 104px; display: flex; flex-direction: column; gap: var(--space-6); }
+  .scroll > * { flex: none; }
+  .bar { position: absolute; left: 0; right: 0; top: 0; z-index: 2; padding-top: var(--space-8); }
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; }
+</style></head>
+<body class="">
+<div class="phone"><div class="scroll">
+  <h1 style="margin:var(--space-4) 0 0;font:700 32px/40px var(--font-serif);letter-spacing:.02em">我的</h1>
+  <ul class="hao-list"><li><a class="hao-list__row" href="#" style="padding:var(--space-4)"><span class="hao-avatar hao-avatar--lg hao-avatar--name" aria-hidden="true">林</span><span class="hao-list__title" style="font-weight:600">林晚<span class="hao-list__sub">已写 38 条札记</span></span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li></ul>
+  <div><p class="hao-list-header">通用</p><ul class="hao-list">
+    <li><a class="hao-list__row" href="#"><span class="hao-list__title">外观</span><span class="hao-list__value">跟随系统</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li><li><a class="hao-list__row" href="#"><span class="hao-list__title">字号</span><span class="hao-list__value">标准</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+    <li><label class="hao-list__row hao-switch" style="display:flex"><span class="hao-list__title">每日提醒</span><input type="checkbox" role="switch" checked></label></li>
+    <li><label class="hao-list__row hao-switch" style="display:flex"><span class="hao-list__title">同步到 iCloud</span><input type="checkbox" role="switch"></label></li>
+  </ul></div>
+  <div><p class="hao-list-header">存储</p><ul class="hao-list"><li><div class="hao-list__row" style="display:block;padding:var(--space-4)"><div style="display:flex;justify-content:space-between;margin-bottom:var(--space-3)"><span>已用 4 GB</span><span class="hao-list__value">共 10 GB</span></div><div class="hao-progress hao-progress--ke" role="progressbar" aria-label="存储空间" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span style="--v:40%"></span></div></div></li><li><a class="hao-list__row" href="#"><span class="hao-list__title">管理存储空间</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li></ul></div>
+  <div><ul class="hao-list"><li><a class="hao-list__row" href="#"><span class="hao-list__title">落款印章</span><span class="hao-seal hao-seal--sm hao-seal--outline" aria-hidden="true">印</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li><li><a class="hao-list__row" href="#"><span class="hao-list__title">关于</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li></ul><p class="hao-list-footer">界面基于 Hairline 设计系统</p></div>
+</div><nav class="hao-tabbar tabs" aria-label="主导航"><a class="hao-tabbar__item" href="#"><i class="hao-icon hao-icon--today" aria-hidden="true"></i>今日</a><a class="hao-tabbar__item" href="#"><i class="hao-icon hao-icon--notes" aria-hidden="true"></i>札记</a><a class="hao-tabbar__item" href="#" aria-current="page"><i class="hao-icon hao-icon--person" aria-hidden="true"></i>我的</a></nav></div>
+</body>
+</html>

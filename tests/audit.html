@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Hairline 渲染检查</title>
+<!--
+  把每个组件的独立预览页（site/preview/）装进隐藏的框架，查四件眼睛容易漏的事：
+    横向溢出、文字被裁掉、实际渲染出来的对比度、单个字在方框里是否居中、键盘焦点环有没有被裁掉或漏画。
+  昼夜两套主题各查一遍，另加一遍 375 宽的窄屏。先运行 python3 build_site.py。
+  打开方式：预览配置 hairline-tests，访问 /tests/audit.html。结果列在页面上，也放在 window.__audit。
+  它替代不了用眼睛看：只能发现能量出来的问题。
+-->
+<style>
+  body { margin: 0; padding: 24px; font: 14px/22px -apple-system, "PingFang SC", sans-serif; color: #161b24; background: #f2f4f7; }
+  h1 { margin: 0 0 8px; font-size: 20px; }
+  li { margin: 2px 0; }
+  .bad { color: #b83224; }
+</style>
+</head>
+<body>
+<h1>渲染检查</h1>
+<p id="summary">正在检查……</p>
+<ul id="list"></ul>
+<script>
+(function () {
+  var NAMES = null;
+  var WIDE = /^(SampleDashboard|SampleWeb)/;
+  /* 固定尺寸的画面：封面是 960 宽的一张图，四张手机示例屏是 390 宽的机身。它们本来就不随窗口变窄，不算横向溢出。 */
+  var FIXED = /^(Cover|Sample(Article|Form|Screen|Settings))/;
+
+  function lum(c) {
+    function f(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+    return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+  }
+  function parse(s) {
+    var m = /rgba?\(([^)]+)\)/.exec(s);
+    if (!m) return null;
+    var p = m[1].split(/[,\s\/]+/).filter(Boolean).map(Number);
+    return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1];
+  }
+  function blend(top, bot) {
+    var a = top[3];
+    return [top[0] * a + bot[0] * (1 - a), top[1] * a + bot[1] * (1 - a), top[2] * a + bot[2] * (1 - a), 1];
+  }
+  /* 往上找到第一层不透明的底色；遇到渐变或图片底就放弃，这种量不准。 */
+  function backdrop(el, win) {
+    var stack = [], e = el;
+    while (e && e.nodeType === 1) {
+      var cs = win.getComputedStyle(e);
+      if (cs.backgroundImage !== 'none') return null;
+      var c = parse(cs.backgroundColor);
+      if (c && c[3] > 0) { stack.push(c); if (c[3] >= 1) break; }
+      e = e.parentElement;
+    }
+    var out = [255, 255, 255, 1];
+    for (var i = stack.length - 1; i >= 0; i -= 1) out = blend(stack[i], out);
+    return out;
+  }
+  function label(el) { return '.' + String(el.className && el.className.baseVal !== undefined ? el.className.baseVal : (el.className || el.tagName)).slice(0, 44); }
+
+  function inspect(doc, win, width, issues, fixed) {
+    var root = doc.documentElement;
+    if (!fixed && root.scrollWidth > width + 1) issues.push('横向溢出：内容宽 ' + root.scrollWidth + 'px');
+    var seen = {};
+    Array.prototype.forEach.call(doc.body.querySelectorAll('*'), function (el) {
+      var cs = win.getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return;
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      if (el.closest('[hidden], [aria-hidden="true"]')) return;
+      var own = Array.prototype.filter.call(el.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); });
+      if (!own.length) return;
+      var text = own.map(function (n) { return n.textContent.trim(); }).join(' ').slice(0, 18);
+
+      if (width >= 800) {
+        var opacity = 1, e = el;
+        while (e && e.nodeType === 1) { opacity *= parseFloat(win.getComputedStyle(e).opacity); e = e.parentElement; }
+        var lab = el.closest('label');
+        var disabled = el.closest('[disabled], [aria-disabled="true"]') || (lab && lab.querySelector('input:disabled'));
+        var fg = parse(cs.color), bg = backdrop(el, win);
+        if (opacity >= 0.99 && !disabled && fg && bg) {
+          var shown = blend(fg, bg), a = lum(shown), b = lum(bg);
+          var ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+          var size = parseFloat(cs.fontSize), need = (size >= 24 || (size >= 18.66 && parseInt(cs.fontWeight, 10) >= 700)) ? 3 : 4.5;
+          var key = cs.color + '|' + bg.map(Math.round).join(',') + '|' + label(el);
+          if (ratio < need - 0.05 && !seen[key]) {
+            seen[key] = true;
+            issues.push('对比度 ' + ratio.toFixed(2) + '（要 ' + need + '）「' + text + '」' + label(el) + ' ' + Math.round(size) + 'px');
+          }
+        }
+        /* 只查「框里只有一两个字」的：框里还带别的东西（月历的日期下面有农历）就不算。 */
+        if (text.length <= 2 && !el.children.length && Math.abs(r.width - r.height) <= 2 && r.width >= 14 && r.width <= 72 && cs.writingMode === 'horizontal-tb') {
+          var range = doc.createRange();
+          range.selectNodeContents(own[0]);
+          var t = range.getBoundingClientRect();
+          var dx = (t.left + t.width / 2) - (r.left + r.width / 2), dy = (t.top + t.height / 2) - (r.top + r.height / 2);
+          if (Math.abs(dx) > 1 || Math.abs(dy) > 1.5) issues.push('不居中「' + text + '」' + label(el) + ' 横偏 ' + dx.toFixed(1) + ' 纵偏 ' + dy.toFixed(1) + '（框 ' + Math.round(r.width) + 'px）');
+        }
+      }
+      if (cs.overflowX === 'hidden' && cs.textOverflow !== 'ellipsis' && el.scrollWidth > el.clientWidth + 1) {
+        issues.push('文字被裁「' + text + '」' + label(el) + ' ' + el.scrollWidth + ' > ' + el.clientWidth);
+      }
+    });
+  }
+
+  /* 键盘焦点环：不靠真的去聚焦（脚本聚焦在没按过键盘的页面里不算 :focus-visible），而是读样式表里带 :focus 的规则，
+     算出每个能点的东西聚焦时环画在哪，再看它有没有被外层的 overflow 裁掉；一条规则也对不上的，就是漏画了。 */
+  function focusRings(doc, win, issues) {
+    var rings = new Map();
+    Array.prototype.forEach.call(doc.styleSheets, function (sheet) {
+      var rules;
+      try { rules = sheet.cssRules; } catch (err) { return; }
+      (function walk(list) {
+        Array.prototype.forEach.call(list, function (rule) {
+          if (rule.cssRules && rule.media && !win.matchMedia(rule.media.mediaText).matches) return;
+          if (rule.cssRules && !rule.selectorText) { walk(rule.cssRules); return; }
+          if (!rule.selectorText || !/:focus/.test(rule.selectorText)) return;
+          rule.selectorText.split(',').forEach(function (part) {
+            if (!/:focus/.test(part)) return;
+            var found;
+            try { found = doc.querySelectorAll(part.replace(/:focus(-visible|-within)?/g, '')); } catch (err) { return; }
+            Array.prototype.forEach.call(found, function (el) {
+              var r = rings.get(el) || { w: 0, off: 0, other: false };
+              /* 简写里带变量时，浏览器不给拆出来的宽度，所以直接读规则的原文 */
+              var text = rule.style.cssText, o = /(?:^|;\s*)outline:\s*([^;]+)/.exec(text), f = /outline-offset:\s*(-?[\d.]+)px/.exec(text);
+              if (o) { var px = /([\d.]+)px/.exec(o[1]); r.w = px && !/none/.test(o[1]) ? parseFloat(px[1]) : 0; }
+              if (f) r.off = parseFloat(f[1]);
+              if (/box-shadow|border-color/.test(text)) r.other = true;
+              rings.set(el, r);
+            });
+          });
+        });
+      }(sheet.cssRules));
+    });
+    Array.prototype.forEach.call(doc.querySelectorAll('a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])'), function (el) {
+      if (el.disabled || el.closest('[hidden]')) return;
+      var box = el.getBoundingClientRect(), cs = win.getComputedStyle(el);
+      if (!box.width || !box.height) return;
+      var tgt = el;
+      /* 原生控件藏起来、环画在后面那个兄弟上的写法（分段控件） */
+      if (parseFloat(cs.opacity) === 0 && el.nextElementSibling) tgt = el.nextElementSibling;
+      var ring = rings.get(tgt);
+      if (!ring || (!ring.w && !ring.other)) { issues.push('没有自己的焦点环' + label(tgt)); return; }
+      if (!ring.w) return;
+      var g = ring.w + ring.off, r = tgt.getBoundingClientRect();
+      for (var a = tgt.parentElement; a && a !== doc.documentElement; a = a.parentElement) {
+        var as = win.getComputedStyle(a), ar = a.getBoundingClientRect(), over = 0;
+        if (as.overflowX !== 'visible' && r.left >= ar.left - 0.5 && r.right <= ar.right + 0.5) over = Math.max(over, ar.left - (r.left - g), (r.right + g) - ar.right);
+        if (as.overflowY !== 'visible' && r.top >= ar.top - 0.5 && r.bottom <= ar.bottom + 0.5) over = Math.max(over, ar.top - (r.top - g), (r.bottom + g) - ar.bottom);
+        if (over > 0.5) { issues.push('焦点环被裁 ' + over.toFixed(0) + 'px' + label(tgt) + '（外层' + label(a) + '）'); break; }
+      }
+    });
+  }
+
+  function probe(name, theme, width) {
+    return new Promise(function (resolve) {
+      var f = document.createElement('iframe');
+      f.style.cssText = 'position:fixed;left:-9999px;top:0;width:' + width + 'px;height:900px;border:0';
+      f.onload = function () {
+        setTimeout(function () {
+          var out = { name: name, theme: theme, width: width, issues: [] };
+          try { inspect(f.contentDocument, f.contentWindow, width, out.issues, FIXED.test(name)); if (theme === 'light' && width >= 800) focusRings(f.contentDocument, f.contentWindow, out.issues); } catch (err) { out.issues.push('出错：' + err.message); }
+          /* 同一种问题在一页里出现多次（一排同样的格子），只留一条并记下次数。 */
+          var counts = {}, order = [];
+          out.issues.forEach(function (s) { var k = s.replace(/「[^」]*」/, '「…」'); if (!counts[k]) { counts[k] = { first: s, n: 0 }; order.push(k); } counts[k].n += 1; });
+          out.issues = order.map(function (k) { return counts[k].first + (counts[k].n > 1 ? '（同类 ' + counts[k].n + ' 处）' : ''); });
+          f.remove();
+          resolve(out);
+        }, 400);
+      };
+      f.src = '../site/preview/' + name + '.html?theme=' + theme;
+      document.body.appendChild(f);
+    });
+  }
+
+  (async function () {
+    var listing = await fetch('../site/preview/', { cache: 'reload' }).then(function (r) { return r.text(); });
+    NAMES = [];
+    listing.replace(/href="([A-Za-z]+)\.html"/g, function (_, n) { NAMES.push(n); return _; });
+    var only = /[?&]only=([A-Za-z,]+)/.exec(location.search);
+    if (only) NAMES = NAMES.filter(function (n) { return only[1].split(',').indexOf(n) >= 0; });
+    var all = [];
+    for (var i = 0; i < NAMES.length; i += 1) {
+      var w = WIDE.test(NAMES[i]) ? 1280 : 800;
+      all.push(await probe(NAMES[i], 'light', w));
+      all.push(await probe(NAMES[i], 'dark', w));
+      all.push(await probe(NAMES[i], 'light', 375));
+      document.getElementById('summary').textContent = '正在检查…… ' + (i + 1) + ' / ' + NAMES.length;
+    }
+    var bad = all.filter(function (a) { return a.issues.length; });
+    var list = document.getElementById('list');
+    bad.forEach(function (a) {
+      var li = document.createElement('li');
+      li.className = 'bad';
+      li.textContent = a.name + '（' + (a.theme === 'dark' ? '夜' : '昼') + '，' + a.width + '）：' + a.issues.join('；');
+      list.appendChild(li);
+    });
+    document.getElementById('summary').textContent = '查了 ' + NAMES.length + ' 个组件、' + all.length + ' 种情况，' + bad.length + ' 种有问题';
+    window.__audit = { components: NAMES.length, runs: all.length, bad: bad };
+    /* tools/check_all.py 带着 ?report=1 打开这一页，跑完把结果发回去。 */
+    if (/[?&]report=1/.test(location.search)) fetch('/__report', { method: 'POST', body: JSON.stringify(window.__audit) });
+  }());
+}());
+</script>
+</body>
+</html>

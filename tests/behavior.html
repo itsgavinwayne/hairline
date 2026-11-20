@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Hairline 行为测试</title>
+<!--
+  行为脚本的测试。不依赖任何库：用浏览器打开就跑，结果列在页面上。
+  测的是 dist/ 里分发出去的那两个文件，所以先运行 python3 build_site.py。
+  打开方式：在仓库根目录起一个静态服务器（预览配置 hairline-tests），访问 /tests/behavior.html。
+  故意不写 data-theme，顺带检验「不写就跟随系统」。
+-->
+<link rel="stylesheet" href="../dist/hairline.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--hao-bg); color: var(--hao-ink); font: 400 15px/22px var(--hao-font-sans); }
+  #results { margin: 0 0 24px; padding: 0; list-style: none; }
+  #results li { padding: 2px 0; }
+  #results .fail { color: var(--hao-seal); font-weight: 600; }
+  #summary { font-weight: 600; }
+  #fixtures { display: grid; gap: 24px; min-height: 1600px; }
+</style>
+</head>
+<body>
+<p id="summary">正在跑……</p>
+<ul id="results"></ul>
+
+<div id="fixtures">
+  <h1 class="hao-title-1" id="t-title">今日</h1>
+
+  <button class="hao-btn" id="open-dialog" data-hao-open="dlg">打开弹窗</button>
+  <div class="hao-scrim" data-hao-modal hidden id="dlg">
+    <div class="hao-dialog" role="dialog" aria-labelledby="dlg-t">
+      <h2 class="hao-dialog__title" id="dlg-t">删除这条札记</h2>
+      <button class="hao-btn hao-btn--tinted" id="dlg-menu-btn" data-hao-menu="dlg-menu">更多</button>
+      <ul class="hao-menu" role="menu" id="dlg-menu" hidden>
+        <li role="none"><button class="hao-menu__item" role="menuitem">复制一份</button></li>
+      </ul>
+      <button class="hao-btn hao-btn--plain" id="dlg-cancel" data-hao-close data-hao-initial>取消</button>
+      <button class="hao-btn hao-btn--seal" id="dlg-ok" data-hao-close>删除</button>
+    </div>
+  </div>
+
+  <button class="hao-btn" id="open-sheet" data-hao-open="sht">打开弹层</button>
+  <div class="hao-scrim hao-scrim--bottom" data-hao-modal hidden id="sht">
+    <div class="hao-sheet" role="dialog" aria-label="分享"><button class="hao-btn" data-hao-close>好</button></div>
+  </div>
+
+  <div><button class="hao-btn hao-btn--tinted" id="menu-btn" data-hao-menu="menu">更多操作</button></div>
+  <ul class="hao-menu" role="menu" id="menu" hidden>
+    <li role="none"><button class="hao-menu__item" role="menuitem" id="mi-1">分享</button></li>
+    <li role="none"><button class="hao-menu__item" role="menuitem" id="mi-2">移到文件夹</button></li>
+    <li role="none"><button class="hao-menu__item" role="menuitem" id="mi-3">删除</button></li>
+  </ul>
+
+  <div class="hao-tabs" role="tablist" aria-label="分区">
+    <button role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1">札记</button>
+    <button role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2">回顾</button>
+    <button role="tab" id="tab-3" aria-selected="false" aria-controls="panel-3">文件夹</button>
+  </div>
+  <div class="hao-tabs__panel" role="tabpanel" id="panel-1">一</div>
+  <div class="hao-tabs__panel" role="tabpanel" id="panel-2">二</div>
+  <div class="hao-tabs__panel" role="tabpanel" id="panel-3">三</div>
+
+  <div style="padding-top:60px"><button class="hao-btn hao-btn--tinted" id="tip-btn" data-hao-tip="导出为 PDF">导出</button></div>
+
+  <div class="hao-cal" id="cal" data-hao-calendar data-mode="plain" data-today="2026-11-18" data-value="2026-11-20"></div>
+
+  <div class="hao-stepper" id="stepper" data-min="1" data-max="3">
+    <button type="button" aria-label="减一">−</button><output>2</output><button type="button" aria-label="加一">+</button>
+  </div>
+
+  <div class="hao-rate" role="radiogroup" aria-label="评分" id="rate">
+    <button type="button" role="radio" aria-checked="false" aria-label="一分"></button>
+    <button type="button" role="radio" aria-checked="true" aria-label="两分"></button>
+    <button type="button" role="radio" aria-checked="false" aria-label="三分"></button>
+  </div>
+
+  <div data-hao-chips="single" id="chips">
+    <button class="hao-chip" data-hao-toggle aria-pressed="true" id="chip-1">全部</button>
+    <button class="hao-chip" data-hao-toggle aria-pressed="false" id="chip-2">随笔</button>
+  </div>
+
+  <ul class="hao-list" role="listbox" aria-label="外观" id="listbox">
+    <li><button class="hao-list__row" role="option" aria-selected="true" id="opt-1"><span class="hao-list__title">跟随系统</span><span class="hao-list__check" aria-hidden="true"></span></button></li>
+    <li><button class="hao-list__row" role="option" aria-selected="false" id="opt-2"><span class="hao-list__title">昼</span></button></li>
+    <li><button class="hao-list__row" role="option" aria-selected="false" id="opt-3"><span class="hao-list__title">夜</span></button></li>
+  </ul>
+
+  <a class="hao-logo hao-logo--sm" href="#" id="logo" lang="en" aria-label="Hairline">Hairline</a>
+
+  <div id="checks">
+    <label class="hao-check"><input type="checkbox" data-hao-checkall="note" id="check-all">全选</label>
+    <label class="hao-check"><input type="checkbox" name="note" id="check-1" checked>一</label>
+    <label class="hao-check"><input type="checkbox" name="note" id="check-2">二</label>
+  </div>
+</div>
+
+<script src="../dist/hairline.js"></script>
+<script>
+(function () {
+  var results = [];
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var css = function (el, prop) { return getComputedStyle(el).getPropertyValue(prop).trim(); };
+  var key = function (k, el, opts) { (el || document.activeElement).dispatchEvent(new KeyboardEvent('keydown', Object.assign({ key: k, bubbles: true, cancelable: true }, opts || {}))); };
+  var mouse = function (type, el, related) { el.dispatchEvent(new MouseEvent(type, { bubbles: true, relatedTarget: related || null })); };
+  function eq(actual, expected, what) { if (actual !== expected) throw new Error(what + '：应为 ' + JSON.stringify(expected) + '，实际 ' + JSON.stringify(actual)); }
+  function ok(cond, what) { if (!cond) throw new Error(what); }
+
+  var tests = [];
+  function test(name, fn) { tests.push({ name: name, fn: fn }); }
+
+  test('令牌：变量带 --hao- 前缀，旧名不存在', function () {
+    ok(css(document.documentElement, '--hao-bg') !== '', '--hao-bg 没有定义');
+    eq(css(document.documentElement, '--bg'), '', '--bg');
+    eq(css(document.documentElement, '--hao-dur-base'), '200ms', '--hao-dur-base');
+  });
+  test('令牌：字体样式类带前缀', function () {
+    eq(css($('#t-title'), 'font-size'), '32px', '.hao-title-1 的字号');
+  });
+  test('主题：不写 data-theme 时跟随系统', function () {
+    var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+    eq(css(document.documentElement, '--hao-bg'), dark ? '#0e1218' : '#f2f4f7', '系统为' + (dark ? '深色' : '浅色') + '时的 --hao-bg');
+    document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+    eq(css(document.documentElement, '--hao-bg'), dark ? '#f2f4f7' : '#0e1218', '写了 data-theme 后的 --hao-bg');
+    document.documentElement.removeAttribute('data-theme');
+  });
+
+  test('弹窗：打开后焦点进弹窗，页面不滚，其余部分不可操作', function () {
+    $('#open-dialog').focus(); $('#open-dialog').click();
+    eq($('#dlg').hidden, false, '弹窗的 hidden');
+    eq(document.activeElement.id, 'dlg-cancel', '焦点');
+    eq(document.documentElement.style.overflow, 'hidden', '页面的 overflow');
+    eq($('#menu-btn').closest('div').inert, true, '弹窗外的内容 inert');
+    eq(css($('#dlg'), 'z-index'), '300', '弹窗的层级');
+  });
+  test('弹窗：Tab 被圈在里面', function () {
+    $('#dlg-ok').focus(); key('Tab');
+    eq(document.activeElement.id, 'dlg-menu-btn', '从最后一个按 Tab');
+    key('Tab', null, { shiftKey: true });
+    eq(document.activeElement.id, 'dlg-ok', '从第一个按 Shift+Tab');
+  });
+  test('弹窗里的菜单：层级比弹窗高', function () {
+    $('#dlg-menu-btn').click();
+    eq($('#dlg-menu').hidden, false, '菜单的 hidden');
+    ok(+css($('#dlg-menu'), 'z-index') > +css($('#dlg'), 'z-index'), '菜单（' + css($('#dlg-menu'), 'z-index') + '）应高于弹窗（' + css($('#dlg'), 'z-index') + '）');
+    key('Escape');
+    eq($('#dlg-menu').hidden, true, 'Esc 先收菜单');
+    eq($('#dlg').hidden, false, '弹窗还开着');
+  });
+  test('弹窗：Esc 关闭，焦点回到触发按钮，页面恢复滚动', function () {
+    key('Escape');
+    eq($('#dlg').hidden, true, '弹窗的 hidden');
+    eq(document.activeElement.id, 'open-dialog', '焦点');
+    eq(document.documentElement.style.overflow, '', '页面的 overflow');
+    eq($('#menu-btn').closest('div').inert, false, 'inert 已撤销');
+  });
+  test('底部弹层：层级低于弹窗', function () {
+    $('#open-sheet').click();
+    eq(css($('#sht'), 'z-index'), '200', '弹层的层级');
+    key('Escape');
+    eq($('#sht').hidden, true, '弹层的 hidden');
+  });
+
+  test('菜单：点开、方向键、Esc', function () {
+    var b = $('#menu-btn'); b.focus(); b.click();
+    eq(b.getAttribute('aria-expanded'), 'true', 'aria-expanded');
+    eq(b.getAttribute('aria-haspopup'), 'menu', 'aria-haspopup');
+    eq(document.activeElement.id, 'mi-1', '焦点落到第一项');
+    eq(css($('#menu'), 'z-index'), '350', '菜单的层级');
+    eq(css($('#menu'), 'position'), 'fixed', '菜单的定位');
+    ok($('#menu').classList.contains('hao-menu--enter'), '菜单进场用「卷帘」');
+    key('ArrowDown'); eq(document.activeElement.id, 'mi-2', 'ArrowDown');
+    key('End'); eq(document.activeElement.id, 'mi-3', 'End');
+    key('ArrowDown'); eq(document.activeElement.id, 'mi-1', '到底后回到头');
+    key('Escape');
+    eq($('#menu').hidden, true, '菜单的 hidden');
+    eq(b.getAttribute('aria-expanded'), 'false', '关闭后的 aria-expanded');
+    eq(document.activeElement.id, 'menu-btn', '焦点回到按钮');
+  });
+  test('菜单：选中一项发出 hao-select', function () {
+    var got = 0; $('#menu').addEventListener('hao-select', function () { got += 1; }, { once: true });
+    $('#menu-btn').click(); $('#mi-2').click();
+    eq(got, 1, 'hao-select 次数');
+    eq($('#menu').hidden, true, '选完后关闭');
+  });
+
+  test('标签页：方向键切换，面板跟着换', function () {
+    eq($('#panel-2').hidden, true, '初始时第二个面板');
+    $('#tab-1').focus(); key('ArrowRight');
+    eq(document.activeElement.id, 'tab-2', '焦点');
+    eq($('#tab-2').getAttribute('aria-selected'), 'true', 'aria-selected');
+    eq($('#panel-1').hidden, true, '第一个面板'); eq($('#panel-2').hidden, false, '第二个面板');
+    eq($('#tab-1').tabIndex, -1, '未选中的 tabindex');
+    key('End'); eq(document.activeElement.id, 'tab-3', 'End');
+    key('ArrowRight'); eq(document.activeElement.id, 'tab-1', '到尾后回到头');
+  });
+
+  test('气泡提示：悬停出现，移到提示上不收，移开才收', async function () {
+    var b = $('#tip-btn');
+    mouse('mouseover', b); await wait(650);
+    var tip = $('.hao-tip--float');
+    ok(tip, '悬停 0.5 秒后应出现');
+    eq(b.getAttribute('aria-describedby'), tip.id, 'aria-describedby');
+    eq(css(tip, 'z-index'), '350', '提示的层级');
+    ok(css(tip, 'pointer-events') !== 'none', '提示应当能被鼠标碰到');
+    mouse('mouseout', b, tip); mouse('mouseover', tip, b); await wait(250);
+    ok($('.hao-tip--float'), '鼠标移到提示上，它不该消失');
+    mouse('mouseout', tip, document.body); await wait(250);
+    ok(!$('.hao-tip--float'), '移开后应消失');
+    ok(!b.hasAttribute('aria-describedby'), '消失后撤掉 aria-describedby');
+  });
+  test('气泡提示：Esc 收起', async function () {
+    mouse('mouseover', $('#tip-btn')); await wait(650);
+    ok($('.hao-tip--float'), '应出现');
+    key('Escape', document.body);
+    ok(!$('.hao-tip--float'), 'Esc 后应消失');
+  });
+
+  test('月历：表格、行、格三层结构', function () {
+    var grid = $('#cal [role="grid"]');
+    ok(grid, '应有 role=grid');
+    ok(document.getElementById(grid.getAttribute('aria-labelledby')), 'grid 应由月份标题命名');
+    var rows = $$('[role="row"]', grid);
+    eq(rows.length, 7, '行数（一行星期加 2026 年 11 月的六周）');
+    eq($$('[role="columnheader"]', rows[0]).length, 7, '星期表头数');
+    eq($$('[role="columnheader"]', rows[0])[0].getAttribute('aria-label'), '星期一', '表头的读法');
+    rows.slice(1).forEach(function (r, i) { eq($$('[role="gridcell"]', r).length, 7, '第 ' + (i + 1) + ' 周的格数'); });
+    eq($$('[role="gridcell"][aria-selected="true"]', grid).length, 1, '选中的格数');
+    eq($('#cal [aria-selected="true"] button').getAttribute('data-date'), '2026-11-20', '选中的日期');
+    eq($$('#cal .hao-cal__day[tabindex="0"]').length, 1, 'Tab 停靠点数');
+  });
+  test('月历：加了行和格之后仍是七列对齐', function () {
+    var rows = $$('#cal [role="row"]');
+    var lefts = function (r) { return $$('[role="columnheader"], [role="gridcell"]', r).map(function (c) { return Math.round(c.getBoundingClientRect().left); }); };
+    var head = lefts(rows[0]);
+    eq(new Set(head).size, 7, '表头的列数');
+    rows.slice(1).forEach(function (r, i) { eq(lefts(r).join(','), head.join(','), '第 ' + (i + 1) + ' 周的各列位置'); });
+    var btn = $('#cal .hao-cal__day');
+    eq(Math.round(btn.getBoundingClientRect().height), 44, '日期按钮的高度');
+    eq(Math.round(btn.getBoundingClientRect().width), Math.round(btn.parentNode.getBoundingClientRect().width), '日期按钮撑满格子');
+  });
+  test('月历：方向键移动，翻页键换月，点一天选中', function () {
+    $('#cal .hao-cal__day[tabindex="0"]').focus();
+    key('ArrowRight'); eq(document.activeElement.getAttribute('data-date'), '2026-11-21', 'ArrowRight');
+    key('ArrowDown'); eq(document.activeElement.getAttribute('data-date'), '2026-11-28', 'ArrowDown');
+    key('Home'); eq(document.activeElement.getAttribute('data-date'), '2026-11-23', 'Home 到周一');
+    key('PageDown'); eq(document.activeElement.getAttribute('data-date'), '2026-12-23', 'PageDown');
+    key('PageUp');
+    var got = null; $('#cal').addEventListener('hao-change', function (e) { got = e.detail.value; }, { once: true });
+    $('#cal [data-date="2026-11-05"]').click();
+    eq(got, '2026-11-05', 'hao-change 带的日期');
+    eq($('#cal [aria-selected="true"] button').getAttribute('data-date'), '2026-11-05', '选中的格');
+    eq($('#cal [data-date="2026-11-05"]').getAttribute('aria-pressed'), 'true', 'aria-pressed');
+    ok(/星期四/.test($('#cal [data-date="2026-11-05"]').getAttribute('aria-label')), '日期的完整读法里有星期');
+  });
+
+  test('步进器：加减、到头禁用', function () {
+    var st = $('#stepper'), btns = $$('button', st), out = st.querySelector('output');
+    btns[1].click(); eq(out.textContent, '3', '加一');
+    eq(btns[1].disabled, true, '到上限后加号禁用');
+    btns[0].click(); btns[0].click(); eq(out.textContent, '1', '减到下限');
+    eq(btns[0].disabled, true, '到下限后减号禁用');
+  });
+  test('评分：方向键改分，只占一个 Tab 停靠点', function () {
+    var rs = $$('#rate [role="radio"]');
+    eq(rs.filter(function (b) { return b.tabIndex === 0; }).length, 1, 'Tab 停靠点数');
+    rs[1].focus(); key('ArrowRight');
+    eq(rs[2].getAttribute('aria-checked'), 'true', '第三个的 aria-checked');
+    eq(rs[1].getAttribute('aria-checked'), 'false', '第二个的 aria-checked');
+    eq(document.activeElement, rs[2], '焦点跟着走');
+  });
+  test('筛选标签：单选组里只亮一个', function () {
+    $('#chip-2').click();
+    eq($('#chip-2').getAttribute('aria-pressed'), 'true', '点的那个');
+    eq($('#chip-1').getAttribute('aria-pressed'), 'false', '原来那个');
+    $('#chip-2').click();
+    eq($('#chip-2').getAttribute('aria-pressed'), 'true', '单选组里不能点成全不选');
+  });
+  test('全选：半选、全选、全不选', function () {
+    var all = $('#check-all');
+    eq(all.indeterminate, true, '初始半选');
+    $('#check-2').click(); eq(all.checked, true, '都勾上后全选'); eq(all.indeterminate, false, '不再半选');
+    all.click(); eq($('#check-1').checked, false, '点全选取消全部');
+  });
+  test('列表单选：只占一个 Tab 停靠点，方向键移动焦点但不改选中', function () {
+    var opts = $$('#listbox [role="option"]');
+    eq(opts.filter(function (o) { return o.tabIndex === 0; }).length, 1, 'Tab 停靠点数');
+    eq(opts[0].parentNode.getAttribute('role'), 'none', '<li> 的 role（让选项直接归列表框）');
+    opts[0].focus(); key('ArrowDown');
+    eq(document.activeElement.id, 'opt-2', 'ArrowDown');
+    eq(opts[0].getAttribute('aria-selected'), 'true', '焦点移走后原来那项仍是选中');
+    key('End'); eq(document.activeElement.id, 'opt-3', 'End');
+    key('ArrowDown'); eq(document.activeElement.id, 'opt-3', '到底不回头');
+    key('Home'); eq(document.activeElement.id, 'opt-1', 'Home');
+  });
+  test('列表单选：点一项选中，提勾跟过去，发出 hao-change', function () {
+    var got = null; $('#listbox').addEventListener('hao-change', function (e) { got = e.detail.value; }, { once: true });
+    $('#opt-3').click();
+    eq(got, 2, 'hao-change 带的序号');
+    eq($('#opt-3').getAttribute('aria-selected'), 'true', '点的那项');
+    eq($('#opt-1').getAttribute('aria-selected'), 'false', '原来那项');
+    eq($$('#listbox .hao-list__check').length, 1, '提勾只有一个');
+    ok($('#opt-3').contains($('#listbox .hao-list__check')), '提勾在选中的那行里');
+    eq($('#opt-3').tabIndex, 0, '选中的那项成为 Tab 停靠点');
+  });
+  test('标志：当链接用时有焦点环', function () {
+    var rule = Array.prototype.slice.call(document.styleSheets[0].cssRules).filter(function (r) { return r.selectorText === 'a.hao-logo:focus-visible'; })[0];
+    ok(rule, '样式表里应有 a.hao-logo:focus-visible');
+    /* 值里带变量时，浏览器不把简写拆开，所以整条比。 */
+    eq(rule.style.getPropertyValue('outline').trim(), '2px solid var(--hao-focus)', '焦点环');
+  });
+  test('轻提示：进播报区，不抢焦点', async function () {
+    var before = document.activeElement;
+    Hairline.toast('已保存', { duration: 300 });
+    var region = $('.hao-toast-region');
+    eq(region.getAttribute('role'), 'status', '播报区的 role');
+    eq(region.textContent, '已保存', '提示文字');
+    eq(css(region, 'z-index'), '400', '轻提示的层级');
+    eq(document.activeElement, before, '焦点没动');
+    await wait(450);
+    eq(region.textContent, '', '到时间后消失');
+  });
+
+  /* 行为脚本在 DOMContentLoaded 时接管页面，等它接管完再开始。 */
+  document.addEventListener('DOMContentLoaded', async function run() {
+    for (var i = 0; i < tests.length; i += 1) {
+      var t = tests[i], r = { name: t.name, pass: true };
+      try { await t.fn(); } catch (e) { r.pass = false; r.error = e.message; }
+      results.push(r);
+      var li = document.createElement('li');
+      li.textContent = (r.pass ? '通过　' : '没过　') + t.name + (r.error ? '　——　' + r.error : '');
+      if (!r.pass) li.className = 'fail';
+      document.getElementById('results').appendChild(li);
+    }
+    var failed = results.filter(function (r) { return !r.pass; }).length;
+    document.getElementById('summary').textContent = '共 ' + results.length + ' 项，通过 ' + (results.length - failed) + ' 项，没过 ' + failed + ' 项';
+    window.__results = { total: results.length, failed: failed, results: results };
+    /* tools/check_all.py 带着 ?report=1 打开这一页，跑完把结果发回去。 */
+    if (/[?&]report=1/.test(location.search)) fetch('/__report', { method: 'POST', body: JSON.stringify(window.__results) });
+  });
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- @dsCard group="示例" height=860 -->
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SampleSettingsEN</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap"><style>
+  body { margin: 0; padding: var(--space-5); display: grid; place-items: center; background: var(--bg); color: var(--ink); font: 400 17px/24px var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .phone { position: relative; width: 390px; max-width: 100%; height: 800px; border-radius: 44px; border: 1px solid var(--hairline); background: var(--bg); overflow: hidden; box-shadow: var(--shadow-float); }
+  .scroll { height: 100%; overflow: auto; box-sizing: border-box; padding: var(--space-12) var(--space-4) 104px; display: flex; flex-direction: column; gap: var(--space-6); }
+  .scroll > * { flex: none; }
+  .bar { position: absolute; left: 0; right: 0; top: 0; z-index: 2; padding-top: var(--space-8); }
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; }
+</style></head>
+<body class="">
+<div class="phone"><div class="scroll">
+  <h1 style="margin:var(--space-4) 0 0;font:700 32px/40px var(--font-serif);letter-spacing:-.015em;font-size:34px;font-weight:600">Me</h1>
+  <ul class="hao-list"><li><a class="hao-list__row" href="#" style="padding:var(--space-4)"><span class="hao-avatar hao-avatar--lg" aria-hidden="true">LW</span><span class="hao-list__title" style="font-weight:600">Lin Wan<span class="hao-list__sub">38 notes written</span></span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li></ul>
+  <div><p class="hao-list-header">General</p><ul class="hao-list">
+    <li><a class="hao-list__row" href="#"><span class="hao-list__title">Appearance</span><span class="hao-list__value">System</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li><li><a class="hao-list__row" href="#"><span class="hao-list__title">Text size</span><span class="hao-list__value">Default</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li>
+    <li><label class="hao-list__row hao-switch" style="display:flex"><span class="hao-list__title">Daily reminder</span><input type="checkbox" role="switch" checked></label></li>
+    <li><label class="hao-list__row hao-switch" style="display:flex"><span class="hao-list__title">iCloud sync</span><input type="checkbox" role="switch"></label></li>
+  </ul></div>
+  <div><p class="hao-list-header">Storage</p><ul class="hao-list"><li><div class="hao-list__row" style="display:block;padding:var(--space-4)"><div style="display:flex;justify-content:space-between;margin-bottom:var(--space-3)"><span>4 GB used</span><span class="hao-list__value">10 GB total</span></div><div class="hao-progress hao-progress--ke" role="progressbar" aria-label="Storage" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span style="--v:40%"></span></div></div></li><li><a class="hao-list__row" href="#"><span class="hao-list__title">Manage storage</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li></ul></div>
+  <div><ul class="hao-list"><li><a class="hao-list__row" href="#"><span class="hao-list__title">Signature seal</span><span class="hao-seal hao-seal--sm hao-seal--outline" lang="zh" aria-label="Seal">印</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li><li><a class="hao-list__row" href="#"><span class="hao-list__title">About</span><i class="hao-icon hao-icon--chevron-right hao-list__chev" aria-hidden="true"></i></a></li></ul><p class="hao-list-footer">Interface built on the Hairline design system</p></div>
+</div><nav class="hao-tabbar tabs" aria-label="Main"><a class="hao-tabbar__item" href="#"><i class="hao-icon hao-icon--today" aria-hidden="true"></i>Today</a><a class="hao-tabbar__item" href="#"><i class="hao-icon hao-icon--notes" aria-hidden="true"></i>Notes</a><a class="hao-tabbar__item" href="#" aria-current="page"><i class="hao-icon hao-icon--person" aria-hidden="true"></i>Me</a></nav></div>
+</body>
+</html>

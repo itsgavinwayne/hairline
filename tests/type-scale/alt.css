@@ -1,0 +1,10 @@
+/* 备选方案「只补不动」：叠在 now.css 上。字号和行高都不动，只补 title-3、display 分档，并收掉两处散值。 */
+.hao-title-3 { font-family: var(--hao-font-serif); font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: .01em; }
+.hao-title-3-en, :lang(en).hao-title-3, :lang(en) .hao-title-3 { font-family: var(--hao-font-serif); font-size: 18px; line-height: 24px; font-weight: 600; letter-spacing: -.01em; }
+.hao-prose h3 { margin: var(--hao-space-6) 0 var(--hao-space-2); font: 600 18px/26px var(--hao-font-serif); letter-spacing: .01em; }
+.hao-prose:lang(en) h3 { line-height: 24px; letter-spacing: -.01em; }
+.hao-handscroll__item h3 { font: 600 18px/26px var(--hao-font-serif); }
+.hao-prose h1 { line-height: 40px; }
+.hao-cal__day[aria-current="date"] { font-weight: 600; }
+@media (min-width: 600px) { .hao-display { font-size: 56px; line-height: 64px; } .hao-display-en, :lang(en).hao-display, :lang(en) .hao-display { font-size: 60px; line-height: 64px; } }
+@media (min-width: 840px) { .hao-display { font-size: 64px; line-height: 72px; } .hao-display-en, :lang(en).hao-display, :lang(en) .hao-display { font-size: 68px; line-height: 72px; } }

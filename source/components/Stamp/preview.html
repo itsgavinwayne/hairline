@@ -1,0 +1,32 @@
+<!-- @dsCard group="反馈" height=760 -->
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>Stamp</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap"></head>
+<body class="hao-stage">
+<div class="hao-bi">
+<section lang="zh-CN">
+<p class="hao-bi__tag">中文</p>
+<div class="hao-row" style="gap:var(--space-8)">
+  <div class="hao-stamp" style="width:300px;border-radius:var(--radius-lg);background:var(--surface)" role="status">
+    <span class="hao-seal hao-seal--lg hao-seal--outline hao-seal--stamp" id="st1" lang="zh" aria-hidden="true">讫</span>
+    <h2 class="hao-stamp__title hao-stamp__text" id="tt1">已发布</h2>
+    <p class="hao-stamp__body hao-stamp__text" id="tb1">这条札记现在所有人可见。</p>
+  </div>
+  <button class="hao-btn hao-btn--tinted" data-replay="st1:hao-seal--stamp,tt1:hao-stamp__text,tb1:hao-stamp__text">再盖一次</button>
+</div>
+</section>
+<section lang="en">
+<p class="hao-bi__tag">English</p>
+<div class="hao-row" style="gap:var(--space-8)">
+  <div class="hao-stamp" style="width:300px;border-radius:var(--radius-lg);background:var(--surface)" role="status">
+    <span class="hao-seal hao-seal--lg hao-seal--outline hao-seal--stamp" id="st2" lang="zh" aria-hidden="true">讫</span>
+    <h2 class="hao-stamp__title hao-stamp__text" id="tt2">Published</h2>
+    <p class="hao-stamp__body hao-stamp__text" id="tb2">Everyone can now see this note.</p>
+  </div>
+  <button class="hao-btn hao-btn--tinted" data-replay="st2:hao-seal--stamp,tt2:hao-stamp__text,tb2:hao-stamp__text">Stamp again</button>
+</div>
+</section>
+</div>
+<script>document.querySelectorAll("[data-replay]").forEach(function (b) { b.addEventListener("click", function () { b.getAttribute("data-replay").split(",").forEach(function (pair) { var p = pair.split(":"), el = document.getElementById(p[0]); el.classList.remove(p[1]); void el.offsetWidth; el.classList.add(p[1]); }); }); });</script>
+</body>
+</html>

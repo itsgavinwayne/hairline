@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Hairline 逐个审阅</title>
+<!--
+  逐个审阅组件用的工作台，不是产品的一部分。
+  每个组件同时给出昼、夜两套，每套里中文在上、英文在下，默认放大到两倍。
+  看完标「通过」或「要改」，要改的写一句意见；意见存在这台电脑的浏览器里，点「复制全部意见」贴给 Claude。
+  打开方式：先运行 python3 build_site.py，启动预览配置 hairline-tests，访问 /tests/review.html。
+-->
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; grid-template-columns: 232px 1fr; font: 14px/22px -apple-system, "PingFang SC", "Noto Sans SC", sans-serif; color: #161b24; background: #e8ebf0; }
+  button, textarea, select { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid #1f4fa8; outline-offset: 2px; }
+
+  .side { height: 100vh; overflow: auto; padding: 16px 12px 24px; background: #fff; border-right: 1px solid #d5dae2; }
+  .side h1 { margin: 0 8px 4px; font-size: 15px; font-weight: 600; }
+  .count { margin: 0 8px 12px; color: #5f6778; font-size: 13px; }
+  .group { margin: 16px 8px 4px; color: #5f6778; font-size: 12px; }
+  .item { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 32px; padding: 4px 8px; border: 0; border-radius: 8px; background: none; text-align: left; }
+  .item:hover { background: #f2f4f7; }
+  .item[aria-current="true"] { background: #e3ebfa; color: #1f4fa8; font-weight: 600; }
+  .item small { margin-left: auto; color: #5f6778; font-size: 12px; font-weight: 400; }
+  .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #7e8696; }
+  .dot[data-s="ok"] { border-color: #24705a; background: #24705a; }
+  .dot[data-s="fix"] { border-color: #b83224; background: #b83224; }
+
+  .main { height: 100vh; overflow: auto; }
+  .bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 20px; background: #fff; border-bottom: 1px solid #d5dae2; }
+  .bar h2 { margin: 0 8px 0 0; font-size: 17px; font-weight: 600; }
+  .bar h2 small { margin-left: 8px; color: #5f6778; font-size: 13px; font-weight: 400; }
+  .sp { flex: 1; }
+  .btn { min-height: 32px; padding: 4px 14px; border: 1px solid #7e8696; border-radius: 8px; background: #fff; }
+  .btn:hover { background: #f2f4f7; }
+  .btn[aria-pressed="true"] { border-color: #1f4fa8; background: #e3ebfa; color: #1f4fa8; font-weight: 600; }
+  .btn--ok[aria-pressed="true"] { border-color: #24705a; background: #e2f2ec; color: #24705a; }
+  .btn--fix[aria-pressed="true"] { border-color: #b83224; background: #fbe9e6; color: #b83224; }
+  select { min-height: 32px; padding: 4px 8px; border: 1px solid #7e8696; border-radius: 8px; background: #fff; }
+  .note { display: flex; gap: 12px; align-items: flex-start; padding: 12px 20px; background: #fff; border-bottom: 1px solid #d5dae2; }
+  .note textarea { flex: 1; min-height: 56px; padding: 8px 10px; border: 1px solid #7e8696; border-radius: 8px; resize: vertical; }
+  .note p { margin: 0; width: 220px; color: #5f6778; font-size: 13px; line-height: 20px; }
+
+  .stage { padding: 20px; }
+  .pane { margin-bottom: 24px; }
+  .pane h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #4a5263; }
+  .frame { overflow: hidden; border: 1px solid #d5dae2; border-radius: 4px; background: #fff; }
+  .frame iframe { display: block; border: 0; transform-origin: 0 0; }
+  .out { display: none; margin: 0 20px 20px; }
+  .out.on { display: block; }
+  .out textarea { width: 100%; min-height: 200px; padding: 10px; border: 1px solid #7e8696; border-radius: 8px; font: 13px/20px ui-monospace, Menlo, monospace; }
+  kbd { padding: 1px 5px; border: 1px solid #d5dae2; border-radius: 4px; background: #f2f4f7; font: 12px ui-monospace, Menlo, monospace; }
+</style>
+</head>
+<body>
+<nav class="side" aria-label="组件">
+  <h1>逐个审阅</h1>
+  <p class="count" id="count">正在读取组件……</p>
+  <div id="list"></div>
+</nav>
+<main class="main">
+  <div class="bar">
+    <h2 id="title">　</h2>
+    <button class="btn" id="prev" type="button">上一个</button>
+    <button class="btn" id="next" type="button">下一个</button>
+    <label>放大 <select id="zoom"><option value="1">1 倍</option><option value="1.5">1.5 倍</option><option value="2" selected>2 倍</option><option value="3">3 倍</option></select></label>
+    <label>看 <select id="themes"><option value="both" selected>昼和夜</option><option value="light">只看昼</option><option value="dark">只看夜</option></select></label>
+    <span class="sp"></span>
+    <button class="btn btn--ok" id="ok" type="button" aria-pressed="false">通过</button>
+    <button class="btn btn--fix" id="fix" type="button" aria-pressed="false">要改</button>
+    <button class="btn" id="copy" type="button">复制全部意见</button>
+  </div>
+  <div class="note">
+    <textarea id="note" aria-label="这个组件的意见" placeholder="哪里要调，写在这里。比如：英文按钮的字比中文低了 1px；夜间的印章太亮。"></textarea>
+    <p>写了意见会自动标成「要改」。<kbd>←</kbd> <kbd>→</kbd> 换组件（光标不在输入框里时）。意见只存在这台电脑的浏览器里。</p>
+  </div>
+  <div class="out" id="out"><textarea id="outText" readonly aria-label="全部意见"></textarea></div>
+  <div class="stage" id="stage"></div>
+</main>
+<script>
+(function () {
+  var ORDER = ['图标', '纹样', '动效', '操作', '表单', '导航', '内容', '反馈', '浮层', '状态', '阅读', '平面', '品牌', '示例', '其他'];
+  var KEY = 'hao-review-v1';
+  var comps = [], at = 0, state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { state = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function $(id) { return document.getElementById(id); }
+  function entry(name) { return state[name] || (state[name] = { s: '', note: '' }); }
+
+  function renderList() {
+    var list = $('list'); list.textContent = '';
+    var last = null, ok = 0, fix = 0;
+    comps.forEach(function (c, i) {
+      if (c.group !== last) { var g = document.createElement('p'); g.className = 'group'; g.textContent = c.group; list.appendChild(g); last = c.group; }
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'item';
+      if (i === at) b.setAttribute('aria-current', 'true');
+      var s = entry(c.name).s; if (s === 'ok') ok += 1; if (s === 'fix') fix += 1;
+      var dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('data-s', s);
+      b.appendChild(dot); b.appendChild(document.createTextNode(c.zh));
+      var sm = document.createElement('small'); sm.textContent = c.name; b.appendChild(sm);
+      b.addEventListener('click', function () { go(i); });
+      list.appendChild(b);
+    });
+    $('count').textContent = '共 ' + comps.length + ' 个，通过 ' + ok + '，要改 ' + fix + '，没看 ' + (comps.length - ok - fix);
+    var cur = list.querySelector('[aria-current="true"]'); if (cur) cur.scrollIntoView({ block: 'nearest' });
+  }
+
+  function renderStage() {
+    var c = comps[at], zoom = parseFloat($('zoom').value), which = $('themes').value;
+    $('title').textContent = c.zh; var sm = document.createElement('small'); sm.textContent = c.name + '　' + (at + 1) + ' / ' + comps.length; $('title').appendChild(sm);
+    var e = entry(c.name);
+    $('note').value = e.note;
+    $('ok').setAttribute('aria-pressed', e.s === 'ok' ? 'true' : 'false');
+    $('fix').setAttribute('aria-pressed', e.s === 'fix' ? 'true' : 'false');
+    var stage = $('stage'); stage.textContent = '';
+    (which === 'both' ? ['light', 'dark'] : [which]).forEach(function (theme) {
+      var pane = document.createElement('section'); pane.className = 'pane';
+      var h = document.createElement('h3'); h.textContent = (theme === 'light' ? '昼' : '夜') + '　中文在上，英文在下'; pane.appendChild(h);
+      var frame = document.createElement('div'); frame.className = 'frame';
+      var f = document.createElement('iframe'); f.title = c.zh + (theme === 'light' ? '，昼' : '，夜');
+      function size(hh) { f.style.width = c.width + 'px'; f.style.height = hh + 'px'; f.style.transform = 'scale(' + zoom + ')'; frame.style.width = Math.round(c.width * zoom) + 2 + 'px'; frame.style.height = Math.round(hh * zoom) + 2 + 'px'; }
+      size(c.height);
+      f.addEventListener('load', function () { try { size(Math.max(c.height, f.contentDocument.documentElement.scrollHeight)); } catch (err) {} });
+      f.src = '../site/preview/' + c.name + '.html?theme=' + theme;
+      frame.appendChild(f); pane.appendChild(frame); stage.appendChild(pane);
+    });
+  }
+
+  function go(i) { at = Math.max(0, Math.min(comps.length - 1, i)); try { localStorage.setItem(KEY + '-at', comps[at].name); } catch (e) {} renderList(); renderStage(); document.querySelector('.main').scrollTop = 0; }
+  function mark(s) { var e = entry(comps[at].name); e.s = e.s === s ? '' : s; save(); renderList(); renderStage(); }
+
+  function report() {
+    var lines = ['组件审阅意见（' + new Date().toISOString().slice(0, 10) + '）', ''];
+    var fix = comps.filter(function (c) { return entry(c.name).s === 'fix'; });
+    var ok = comps.filter(function (c) { return entry(c.name).s === 'ok'; });
+    lines.push('要改 ' + fix.length + ' 个：');
+    fix.forEach(function (c) { lines.push('- ' + c.zh + ' ' + c.name + '：' + (entry(c.name).note.trim().replace(/\n+/g, '；') || '（没写意见）')); });
+    lines.push('', '通过 ' + ok.length + ' 个：' + ok.map(function (c) { return c.name; }).join('、'));
+    var rest = comps.filter(function (c) { return !entry(c.name).s; });
+    lines.push('', '还没看 ' + rest.length + ' 个：' + rest.map(function (c) { return c.name; }).join('、'));
+    return lines.join('\n');
+  }
+
+  $('prev').addEventListener('click', function () { go(at - 1); });
+  $('next').addEventListener('click', function () { go(at + 1); });
+  $('ok').addEventListener('click', function () { mark('ok'); });
+  $('fix').addEventListener('click', function () { mark('fix'); });
+  $('zoom').addEventListener('change', renderStage);
+  $('themes').addEventListener('change', renderStage);
+  $('note').addEventListener('input', function () {
+    var e = entry(comps[at].name); e.note = $('note').value;
+    if (e.note.trim() && e.s !== 'fix') { e.s = 'fix'; $('fix').setAttribute('aria-pressed', 'true'); $('ok').setAttribute('aria-pressed', 'false'); renderList(); }
+    save();
+  });
+  $('copy').addEventListener('click', function () {
+    var text = report(); $('outText').value = text; $('out').classList.add('on');
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { $('copy').textContent = '已复制'; setTimeout(function () { $('copy').textContent = '复制全部意见'; }, 1600); }, function () { $('outText').select(); });
+    else $('outText').select();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (/^(TEXTAREA|SELECT|INPUT)$/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') go(at + 1);
+    else if (e.key === 'ArrowLeft') go(at - 1);
+  });
+
+  (async function () {
+    var listing = await fetch('../site/preview/', { cache: 'reload' }).then(function (r) { return r.text(); });
+    var names = [];
+    listing.replace(/href="([A-Za-z]+)\.html"/g, function (_, n) { names.push(n); return _; });
+    comps = await Promise.all(names.map(async function (name) {
+      var src = await fetch('../source/components/' + name + '/preview.html').then(function (r) { return r.text(); });
+      var card = (/@dsCard([^>]*?)-->/.exec(src) || [])[1] || '';
+      var page = await fetch('../site/components/' + name.toLowerCase() + '.html').then(function (r) { return r.ok ? r.text() : ''; });
+      var zh = (/<h1>([^<]+)</.exec(page) || [])[1] || name;
+      var group = (/group="([^"]+)"/.exec(card) || [])[1] || (name === 'Cover' ? '示例' : '其他');
+      return { name: name, zh: zh.trim(), group: group, height: parseInt((/height=(\d+)/.exec(card) || [])[1] || '400', 10) + 40, width: parseInt((/width=(\d+)/.exec(card) || [])[1] || (name === 'Cover' ? '960' : '800'), 10) };
+    }));
+    comps.sort(function (a, b) { return (ORDER.indexOf(a.group) - ORDER.indexOf(b.group)) || a.name.localeCompare(b.name); });
+    var saved = null; try { saved = localStorage.getItem(KEY + '-at'); } catch (e) {}
+    var i = comps.findIndex(function (c) { return c.name === saved; });
+    go(i < 0 ? 0 : i);
+  }());
+}());
+</script>
+</body>
+</html>

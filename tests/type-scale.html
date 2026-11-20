@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>字号阶梯对比 · 毫 Hairline</title>
+<!--
+  同一组内容，三套字号并排：现在、推荐、备选。给人拍板用，不是自动测试。
+  先运行 python3 build_site.py（推荐那一栏读 dist/hairline.css），再用预览配置 hairline-tests 打开 /tests/type-scale.html。
+  「现在」读的是 tests/type-scale/now.css，重排之前的样式快照；「备选」是在它上面叠 tests/type-scale/alt.css。
+  分析见 docs/audit/type-scale.md。定了之后，这一页和 tests/type-scale/ 可以一起删掉。
+-->
+<script>
+  (function () { var t = null; try { t = localStorage.getItem('hao-ts-theme'); } catch (e) {} document.documentElement.dataset.theme = t === 'dark' ? 'dark' : 'light'; })();
+</script>
+<link rel="stylesheet" href="../dist/hairline.css">
+<style>
+  body { margin: 0; background: var(--hao-bg); color: var(--hao-ink); font: 400 15px/24px var(--hao-font-sans); -webkit-font-smoothing: antialiased; }
+  .wrap { box-sizing: border-box; max-width: 1360px; margin: 0 auto; padding: var(--hao-space-8) var(--hao-space-5) var(--hao-space-12); }
+  .lead { max-width: 40em; margin: var(--hao-space-2) 0 0; color: var(--hao-ink-secondary); }
+  h1, h2 { margin: 0; }
+  .bar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: var(--hao-space-3) var(--hao-space-5); margin: var(--hao-space-6) calc(var(--hao-space-5) * -1) 0; padding: var(--hao-space-3) var(--hao-space-5); background: var(--hao-material); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-bottom: 1px solid var(--hao-hairline); }
+  .bar .hao-seg span { min-width: 56px; }
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(360px, 1fr)); gap: var(--hao-space-5); margin-top: var(--hao-space-6); overflow-x: auto; padding-bottom: var(--hao-space-2); }
+  .cols--stack { grid-template-columns: minmax(0, 1fr); }
+  .col { min-width: 0; }
+  .col__h { display: flex; align-items: baseline; gap: var(--hao-space-3); margin: 0 0 var(--hao-space-1); }
+  .col__n { margin: 0 0 var(--hao-space-3); color: var(--hao-ink-secondary); min-height: 40px; }
+  .col iframe { display: block; width: 100%; height: 640px; border: 0; border-radius: var(--hao-radius-lg); box-shadow: 0 0 0 1px var(--hao-hairline); background: var(--hao-bg); }
+  .pick { color: var(--hao-tint); }
+  .sec { margin-top: var(--hao-space-12); }
+  .sec > p { max-width: 44em; color: var(--hao-ink-secondary); margin: var(--hao-space-2) 0 var(--hao-space-5); }
+  .hao-table td, .hao-table th { white-space: nowrap; }
+  .chg { color: var(--hao-tint); font-weight: 600; }
+  .same { color: var(--hao-ink-tertiary); }
+  .w { display: flex; flex-wrap: wrap; align-items: center; gap: var(--hao-space-3); margin-bottom: var(--hao-space-4); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="hao-title-1">字号阶梯对比</h1>
+  <p class="lead">同一组内容排三遍：现在的、推荐的、备选的。先看整体松紧和标题与正文的距离，再看表里的数。推荐方案已经落在样式里，备选只在这一页上。</p>
+
+  <div class="bar">
+    <span class="hao-seg" role="radiogroup" aria-label="内容" id="sample">
+      <label><input type="radio" name="sample" value="screen" checked><span>首页</span></label>
+      <label><input type="radio" name="sample" value="article"><span>文章</span></label>
+      <label><input type="radio" name="sample" value="form"><span>表单</span></label>
+      <label><input type="radio" name="sample" value="data"><span>数据</span></label>
+    </span>
+    <span class="hao-seg" role="radiogroup" aria-label="语言" id="lang">
+      <label><input type="radio" name="lang" value="zh" checked><span>中文</span></label>
+      <label><input type="radio" name="lang" value="en"><span lang="en">English</span></label>
+    </span>
+    <span class="hao-seg" role="radiogroup" aria-label="主题" id="theme">
+      <label><input type="radio" name="theme" value="light"><span>昼</span></label>
+      <label><input type="radio" name="theme" value="dark"><span>夜</span></label>
+    </span>
+  </div>
+
+  <div class="cols" id="cols">
+    <section class="col"><h2 class="col__h hao-title-3">现在</h2><p class="col__n hao-footnote">44 · 32 · 22 · 17 · 15 · 13 · 12，行高落在 2 的格上。</p><iframe data-scale="now" title="现在"></iframe></section>
+    <section class="col"><h2 class="col__h hao-title-3 pick">推荐</h2><p class="col__n hao-footnote">标题每级乘 √2：17 → 24 → 32 → 44，补一个半级 20；行高都是 4 的倍数；封面字随窗口分三档。</p><iframe data-scale="rec" title="推荐"></iframe></section>
+    <section class="col"><h2 class="col__h hao-title-3">备选</h2><p class="col__n hao-footnote">只补不动：字号行高照旧，补一个 18 的小标题和封面字分档。</p><iframe data-scale="alt" title="备选"></iframe></section>
+  </div>
+
+  <section class="sec">
+    <h2 class="hao-title-2">封面字随窗口变</h2>
+    <p>display 是唯一跟着窗口变大的一级。下面三栏各占整行，可以选一个宽度看它落在哪一档：窄 44，中 56，宽 64（英文 48、60、68）。「现在」不分档，一直是 44。</p>
+    <div class="w">
+      <span class="hao-seg" role="radiogroup" aria-label="窗口宽度" id="width">
+        <label><input type="radio" name="width" value="390"><span>窄 390</span></label>
+        <label><input type="radio" name="width" value="720"><span>中 720</span></label>
+        <label><input type="radio" name="width" value="1200" checked><span>宽 1200</span></label>
+      </span>
+    </div>
+    <div class="cols cols--stack" id="covers">
+      <section class="col"><h3 class="col__h hao-headline">现在</h3><iframe data-scale="now" data-sample="cover" title="现在的封面字"></iframe></section>
+      <section class="col"><h3 class="col__h hao-headline pick">推荐与备选（两者相同）</h3><iframe data-scale="rec" data-sample="cover" title="推荐的封面字"></iframe></section>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2 class="hao-title-2">三套的数</h2>
+    <p>字号 / 行高，单位像素。蓝色是和现在不一样的地方。英文只列和中文不同的几级。</p>
+    <div class="hao-table-wrap"><table class="hao-table">
+      <thead><tr><th scope="col">样式</th><th scope="col">用在哪</th><th scope="col">现在</th><th scope="col">推荐</th><th scope="col">备选</th></tr></thead>
+      <tbody>
+        <tr><td>display</td><td class="hao-muted">封面、启动页</td><td>44/52</td><td><span class="chg">44/52 → 56/64 → 64/72</span></td><td><span class="chg">44/52 → 56/64 → 64/72</span></td></tr>
+        <tr><td>title-1</td><td class="hao-muted">页面大标题、文章题目</td><td>32/40（文章里 32/42）</td><td>32/40</td><td>32/40</td></tr>
+        <tr><td>title-2</td><td class="hao-muted">卡片、分区、弹窗标题</td><td>22/30</td><td><span class="chg">24/32</span></td><td class="same">22/30</td></tr>
+        <tr><td>title-3</td><td class="hao-muted">小标题</td><td class="same">没有，用 headline 顶</td><td><span class="chg">20/28</span></td><td><span class="chg">18/26</span></td></tr>
+        <tr><td>headline</td><td class="hao-muted">按钮、栏内标题</td><td>17/24</td><td>17/24</td><td>17/24</td></tr>
+        <tr><td>body</td><td class="hao-muted">正文、列表行</td><td>17/26</td><td><span class="chg">17/28</span></td><td class="same">17/26</td></tr>
+        <tr><td>长文正文</td><td class="hao-muted">Prose</td><td>17/30</td><td><span class="chg">17/32</span></td><td class="same">17/30</td></tr>
+        <tr><td>callout</td><td class="hao-muted">辅助说明、标签、分段</td><td>15/22（段落里 15/24）</td><td><span class="chg">15/24</span></td><td class="same">15/22</td></tr>
+        <tr><td>footnote</td><td class="hao-muted">页脚说明、时间</td><td>13/18</td><td><span class="chg">13/20</span></td><td class="same">13/18</td></tr>
+        <tr><td>caption</td><td class="hao-muted">标签、标签栏</td><td>12/16</td><td>12/16</td><td>12/16</td></tr>
+        <tr><td lang="en">display-en</td><td class="hao-muted">英文封面</td><td>48/52</td><td><span class="chg">48/52 → 60/64 → 68/72</span></td><td><span class="chg">48/52 → 60/64 → 68/72</span></td></tr>
+        <tr><td lang="en">title-1-en</td><td class="hao-muted">英文大标题</td><td>34/40</td><td>34/40</td><td>34/40</td></tr>
+        <tr><td lang="en">title-2-en</td><td class="hao-muted">英文卡片标题</td><td>22/28</td><td><span class="chg">24/28</span></td><td class="same">22/28</td></tr>
+        <tr><td lang="en">title-3-en</td><td class="hao-muted">英文小标题</td><td class="same">没有</td><td><span class="chg">20/24</span></td><td><span class="chg">18/24</span></td></tr>
+        <tr><td lang="en">body-en</td><td class="hao-muted">英文正文</td><td>17/24</td><td>17/24</td><td>17/24</td></tr>
+        <tr><td>日历页的日期</td><td class="hao-muted">DateTile</td><td>30/34</td><td><span class="chg">34/36</span></td><td class="same">30/34</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var state = { sample: 'screen', lang: 'zh', theme: document.documentElement.dataset.theme, width: '1200' };
+  var frames = Array.prototype.slice.call(document.querySelectorAll('iframe'));
+  function src(f) {
+    return 'type-scale/frame.html?scale=' + f.dataset.scale + '&sample=' + (f.dataset.sample || state.sample) + '&lang=' + state.lang + '&theme=' + state.theme;
+  }
+  function render() {
+    document.documentElement.dataset.theme = state.theme;
+    frames.forEach(function (f) {
+      if (f.dataset.sample) { f.style.width = state.width + 'px'; f.style.maxWidth = '100%'; }
+      var s = src(f);
+      if (f.getAttribute('src') !== s) f.setAttribute('src', s);
+    });
+    document.querySelector('#theme input[value="' + state.theme + '"]').checked = true;
+  }
+  ['sample', 'lang', 'theme', 'width'].forEach(function (k) {
+    document.getElementById(k).addEventListener('change', function (e) {
+      state[k] = e.target.value;
+      if (k === 'theme') { try { localStorage.setItem('hao-ts-theme', state.theme); } catch (err) {} }
+      render();
+    });
+  });
+  /* 每一栏按内容自己报的高度撑开，三栏各自的高矮差就是行高变化的结果，不抹平 */
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || !d.typeScaleFrame) return;
+    frames.forEach(function (f) { if (f.contentWindow === e.source) f.style.height = d.height + 'px'; });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

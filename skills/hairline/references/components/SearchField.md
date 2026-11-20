@@ -1,0 +1,24 @@
+# SearchField · 搜索框
+
+搜索框，胶囊形，左边一个放大镜。
+
+`<label class="hao-search">` 里放放大镜图标和 `<input type="search">`。你提供占位符和 `aria-label`，两者写一样的话。
+
+- 框的右端有一朵细线的云头，颜色很淡，输入文字后就隐去。它是这个控件自己的形，不算景；只画这一朵，不铺成一片。
+- 占位符说清搜的是什么（「搜索札记」），不只写「搜索」。
+- 边输入边出结果；没有结果时用空状态，并把搜的词写进标题。
+- 窄屏上放在大标题下方，随页面滚走；宽屏上放在顶部导航的右侧。
+
+## 标记
+
+### 中文
+
+```html
+<label class="hao-search" style="width:340px;max-width:100%"><i class="hao-icon hao-icon--search" aria-hidden="true"></i><input type="search" placeholder="搜索札记" aria-label="搜索札记"></label>
+```
+
+### English
+
+```html
+<label class="hao-search" style="width:340px;max-width:100%"><i class="hao-icon hao-icon--search" aria-hidden="true"></i><input type="search" placeholder="Search notes" aria-label="Search notes"></label>
+```

@@ -1,0 +1,49 @@
+# Link · 链接
+
+带人去另一个页面的文字链接。按它所在的位置，有三种写法。
+
+| 在哪里 | 怎么写 | 样子 |
+| --- | --- | --- |
+| 一段话里 | `hao-link` | `tint` 色加一道细下划线。在一行字里，要靠下划线认出哪几个字能点。 |
+| 单独成行，在一段说明的下面 | `hao-link hao-link--go` | 加粗的 `tint` 色文字，没有下划线，行尾自动跟一个折角，和分组列表行尾的是同一个。 |
+| 主按钮旁边 | `hao-btn hao-btn--plain` | 文字按钮，和主按钮一样高。见 `Button`。 |
+
+- 链接文字写清去哪里或能看到什么（「读设计原则」「看全部图标」），不写「点击这里」「了解更多」。
+- `hao-link--go` 的折角是样式画的，不用自己加图标。一段说明下面只放一个。
+- `hao-link--go` 高 44px，够手指点。鼠标移上去时出现细下划线，折角右移 3px；系统开了「减弱动态效果」时折角不动。
+- 不要把带下划线的 `hao-link` 放在按钮旁边：它比按钮矮，对不齐。
+- 会离开当前网站的链接，在文字里说明（「在 GitHub 上看」），不另加图标。
+
+**无障碍**
+
+- 链接是原生 `<a>`：Tab 走到，回车打开。
+- 聚焦时文字外描一圈 `focus` 色的边，键盘停在哪一条看得见。
+- `hao-link--go` 的折角是 `::after` 画的，读屏只读链接文字，你不用为折角写什么。
+
+## 标记
+
+### 中文
+
+```html
+<div class="hao-stack" style="max-width:none">
+  <p class="hao-body" style="margin:0;max-width:34em">红色怎么用，写在<a class="hao-link" href="#">设计原则</a>里；要做一方真正的印，再看印稿规范。</p>
+  <div><a class="hao-link hao-link--go" href="#">读设计原则</a></div>
+  <div class="hao-row">
+    <a class="hao-btn" href="#">开始使用</a>
+    <a class="hao-btn hao-btn--plain" href="#">浏览组件</a>
+  </div>
+</div>
+```
+
+### English
+
+```html
+<div class="hao-stack" style="max-width:none">
+  <p class="hao-body" style="margin:0;max-width:34em">How red is used is set out in the <a class="hao-link" href="#">design principles</a>; to cut a real seal, read the seal guide next.</p>
+  <div><a class="hao-link hao-link--go" href="#">Read the principles</a></div>
+  <div class="hao-row">
+    <a class="hao-btn" href="#">Get started</a>
+    <a class="hao-btn hao-btn--plain" href="#">Browse components</a>
+  </div>
+</div>
+```

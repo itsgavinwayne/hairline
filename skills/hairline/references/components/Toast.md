@@ -1,0 +1,42 @@
+# Toast · 轻提示
+
+操作之后短暂出现的一句回执，不打断人。
+
+`<div class="hao-toast" role="status">`，里面是可选的图标、一句话，和至多一个 `.hao-toast__action`。文字由你提供。
+
+- 颜色是反过来的：`ink` 作底，`bg` 作字，所以在昼夜两套主题里都醒目。
+- 一句话，说结果，和触发它的按钮用同一个词：按钮是「保存」，这里就是「已保存」。
+- 出现在屏幕底部、标签栏之上，四秒后自己消失；带「撤销」的停留八秒。
+- 只用于成功和中性的消息。出错要用提示条或弹窗，因为人需要时间读。
+- 同一时间只显示一条。
+- 进场加 `hao-toast--enter`，从下方浮上来。
+- 成功的回执前面放一枚提勾 `.hao-toast__ok`，和勾选框里的勾是同一个笔形。中性的消息不放图标。
+
+**行为**（加载了行为脚本时）
+
+- 脚本里调用 `Hairline.toast('已保存', { ok: true })`；带操作的写 `Hairline.toast('已删除', { action: '撤销', onAction: 函数 })`。也可以直接在按钮上写 `data-hao-toast="文字"`，可选 `data-hao-toast-ok` 和 `data-hao-toast-action="撤销"`。
+- 提示出现在屏幕底部正中，四秒后消失，带操作的停八秒。鼠标停在上面或焦点在里面时不计时。
+- 同一时间只显示一条，后来的排队。
+- 提示所在的区域是一个礼貌的实时播报区，读屏会念出来，不抢焦点。
+
+## 标记
+
+### 中文
+
+```html
+<div class="hao-stack" style="align-items:flex-start">
+  <div class="hao-toast" role="status"><span class="hao-toast__ok" aria-hidden="true"></span>已保存</div>
+  <div class="hao-toast" role="status">已删除「晨间札记」<button class="hao-toast__action">撤销</button></div>
+</div>
+<div class="hao-row" style="margin-top:var(--hao-space-5)"><button class="hao-btn hao-btn--tinted" data-hao-toast="已保存" data-hao-toast-ok>保存</button><button class="hao-btn hao-btn--tinted" data-hao-toast="已删除「晨间札记」" data-hao-toast-action="撤销">删除</button></div>
+```
+
+### English
+
+```html
+<div class="hao-stack" style="align-items:flex-start">
+  <div class="hao-toast" role="status"><span class="hao-toast__ok" aria-hidden="true"></span>Saved</div>
+  <div class="hao-toast" role="status">Deleted “Morning note”<button class="hao-toast__action">Undo</button></div>
+</div>
+<div class="hao-row" style="margin-top:var(--hao-space-5)"><button class="hao-btn hao-btn--tinted" data-hao-toast="Saved" data-hao-toast-ok>Save</button><button class="hao-btn hao-btn--tinted" data-hao-toast="Deleted “Morning note”" data-hao-toast-action="Undo">Delete</button></div>
+```

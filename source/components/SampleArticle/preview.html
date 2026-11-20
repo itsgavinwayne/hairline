@@ -1,0 +1,29 @@
+<!-- @dsCard group="示例" height=860 -->
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>SampleArticle</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+SC:wght@600;700;900&display=swap"><style>
+  body { margin: 0; padding: var(--space-5); display: grid; place-items: center; background: var(--bg); color: var(--ink); font: 400 17px/28px var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .phone { position: relative; width: 390px; max-width: 100%; height: 800px; border-radius: 44px; border: 1px solid var(--hairline); background: var(--bg); overflow: hidden; box-shadow: var(--shadow-float); }
+  .scroll { height: 100%; overflow: auto; box-sizing: border-box; padding: var(--space-12) var(--space-4) 104px; display: flex; flex-direction: column; gap: var(--space-6); }
+  .scroll > * { flex: none; }
+  .bar { position: absolute; left: 0; right: 0; top: 0; z-index: 2; padding-top: var(--space-8); }
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; }
+</style></head>
+<body class="">
+<div class="phone">
+  <header class="hao-nav bar"><div class="hao-nav__bar"><a class="hao-nav__action" href="#"><i class="hao-icon hao-icon--chevron-left" aria-hidden="true"></i>札记</a><span></span><button class="hao-lamp" aria-pressed="true" aria-label="取消收藏" style="justify-self:end"></button></div></header>
+  <div class="scroll" style="padding:88px 0 var(--space-8);gap:0;background:var(--surface)">
+  <article class="hao-prose" style="padding-top:var(--space-8)">
+    <h1>雾里的早晨</h1>
+    <p class="hao-prose__meta">丙午年 小雪前四日</p>
+    <p>早上推开窗，对面的楼只剩一个淡淡的轮廓。雾把远处的东西都收走了，只留下眼前这一小块：窗台、一盆文竹、一杯刚倒的水。</p>
+    <figure class="hao-mount hao-mount--wide" style="width:100%;padding:14px 22px"><svg viewBox="0 0 340 150" role="img" aria-label="连绵的远山与月"><circle class="wash" cx="270" cy="40" r="15"/><path class="far" d="M0 84l40-34 30 20 44-46 50 52 40-26 56 40 80-30M0 104h60M90 100h50M190 104h90"/><path d="M0 120l60-26 40 14 56-30 60 34 60-16 64 20"/><path class="far" d="M30 134h60M120 138h80M230 133h70"/></svg><figcaption>远山</figcaption></figure>
+    <p>平时总觉得要看得远才算看清楚。今天看不远，反倒把近处的东西看了个仔细。</p>
+    <blockquote class="hao-quote"><p>虽由人作，宛自天开。</p><cite>计成《园冶》</cite></blockquote>
+    <p>画山水的人说，纸上最要紧的是没画的地方。雾大概就是天地自己留的白。</p>
+    <div class="hao-divider" role="separator"><i></i></div>
+    <p>等到九点钟，雾散了，楼又回来了。我把杯子里的水喝完，开始做今天的第一件事。</p>
+    <div class="hao-prose__sign"><span class="hao-sign"><span class="hao-slip">丙午冬</span><span class="hao-seal hao-seal--sm hao-seal--outline" aria-hidden="true">印</span></span></div>
+  </article></div></div>
+</body>
+</html>

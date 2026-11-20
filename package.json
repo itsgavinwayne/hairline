@@ -1,0 +1,39 @@
+{
+  "name": "hao-hairline",
+  "version": "1.0.0",
+  "description": "毫 Hairline：iOS 的克制加一点东方气韵的设计系统。一份样式表、一份行为脚本、一份令牌，不依赖任何框架。",
+  "private": true,
+  "license": "MIT",
+  "keywords": [
+    "design-system",
+    "css",
+    "design-tokens",
+    "chinese",
+    "hairline"
+  ],
+  "files": [
+    "dist",
+    "skills",
+    "CHANGELOG.md",
+    "LICENSE",
+    "LICENSE-docs.md"
+  ],
+  "main": "dist/hairline.js",
+  "style": "dist/hairline.css",
+  "unpkg": "dist/hairline.js",
+  "jsdelivr": "dist/hairline.js",
+  "exports": {
+    ".": "./dist/hairline.js",
+    "./hairline.js": "./dist/hairline.js",
+    "./hairline.css": "./dist/hairline.css",
+    "./tokens.json": "./dist/tokens.json",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": true,
+  "scripts": {
+    "build": "python3 build_site.py",
+    "check": "python3 tools/check_all.py --no-browser",
+    "test": "python3 tools/check_all.py"
+  },
+  "author": "Gavinwayne"
+}
