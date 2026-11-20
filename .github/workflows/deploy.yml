@@ -1,0 +1,40 @@
+# 推送到 main 之后，重新生成文档站并发布到 GitHub Pages（https://hairline.gavinwayne.com）。
+# 先跑一遍不用浏览器的检查，没过就不发布。
+name: 部署文档站
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只发布一次；排着队的旧发布让位给新的，正在发布的不打断。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+      - name: 生成并检查
+        run: python3 tools/check_all.py --no-browser
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v5
