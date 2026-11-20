@@ -72,5 +72,5 @@ When a component changes, it fires an event on itself; the event bubbles, so you
 
 - Gestures like pull-to-refresh and the drag-down-to-dismiss sheet.
 - Table sorting and filtering, paged data loading, upload progress: these touch data, so the product using the system wires them up.
-- Custom select panels. Selects always use the native control.
+- A scripted replacement for the select panel. Selects always use the native control; on the desktop the stylesheet makes the panel look like the menu, see `Select`.
 - This script is for the web. In native iOS apps, system controls provide these behaviors.

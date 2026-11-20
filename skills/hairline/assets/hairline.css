@@ -359,6 +359,24 @@
 .hao-select--plain::after { right: 0; background: var(--hao-ink-tertiary); }
 .hao-select select:disabled { opacity: var(--hao-opacity-disabled); cursor: not-allowed; }
 .hao-list__row > .hao-select { margin: -6px -6px -6px auto; }
+/* Select 的面板。能定制的浏览器里，桌面上点开的那一列选项画成和 Menu 同一个样子，仍是原生的 <select>，键盘和读屏照旧。
+   不支持的浏览器、触屏设备上什么都不变：前者是系统自己的弹出菜单，后者唤起系统的选择器。 */
+@supports (appearance: base-select) {
+  @media (hover: hover) and (pointer: fine) {
+    .hao-select select, .hao-select select::picker(select) { appearance: base-select; }
+    .hao-select select { display: inline-flex; align-items: center; }
+    .hao-select select::picker-icon { display: none; }
+    .hao-select select::picker(select) { box-sizing: border-box; min-width: 220px; margin: var(--hao-space-1) 0; padding: var(--hao-space-1) 0; border: 0; border-radius: var(--hao-radius-md); background: var(--hao-surface); box-shadow: var(--hao-shadow-float); color: var(--hao-ink); font: 400 17px/24px var(--hao-font-sans); text-align: left; position-try-order: normal; }
+    .hao-select--plain select::picker(select) { position-area: block-end span-inline-start; position-try-fallbacks: block-start span-inline-start, block-end span-inline-end, block-start span-inline-end; }
+    .hao-select select:open::picker(select) { animation: hao-blind var(--hao-dur-base) var(--hao-ease-out) both; }
+    .hao-select option { display: flex; align-items: center; justify-content: space-between; gap: var(--hao-space-4); box-sizing: border-box; min-height: 44px; padding: 0 var(--hao-space-4); background: none; color: var(--hao-ink); cursor: pointer; }
+    .hao-select option:hover { background-color: var(--hao-surface-hover); }
+    .hao-select option:active { background-color: var(--hao-surface-sunken); }
+    .hao-select option:focus-visible { outline: 2px solid var(--hao-focus); outline-offset: -2px; }
+    .hao-select option:disabled { opacity: var(--hao-opacity-disabled); cursor: not-allowed; }
+    .hao-select option::checkmark { content: ""; order: 1; flex: none; width: 20px; height: 20px; background: var(--hao-tint); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.500 10.500l3.500 3.500 7.500-8'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.500 10.500l3.500 3.500 7.500-8'/%3E%3C/svg%3E") center / contain no-repeat; }
+  }
+}
 textarea.hao-field__input { min-height: 112px; padding: var(--hao-space-3) var(--hao-space-4); line-height: 28px; resize: vertical; }
 
 /* SearchField */
@@ -935,7 +953,7 @@ a.hao-logo:focus-visible { outline: 2px solid var(--hao-focus); outline-offset: 
   .hao-btn, .hao-switch input, .hao-switch input::after, .hao-seg span, .hao-check input, .hao-radio input, .hao-progress > span, .hao-acc summary::after { transition: none; }
   .hao-acc details[open] > .hao-acc__body { animation: none; }
   .hao-spinner { animation-duration: 3s; }
-  .hao-seal--stamp, .hao-stamp__text, .hao-sheet--enter, .hao-sheet--enter > *, .hao-scrim--enter, .hao-dialog--enter, .hao-toast--enter, .hao-menu--enter, .hao-menu--enter > *, .hao-lamp--lit::before { animation: none; }
+  .hao-seal--stamp, .hao-stamp__text, .hao-sheet--enter, .hao-sheet--enter > *, .hao-scrim--enter, .hao-dialog--enter, .hao-toast--enter, .hao-menu--enter, .hao-menu--enter > *, .hao-lamp--lit::before, .hao-select select:open::picker(select) { animation: none; }
   .hao-ripple::before { animation: none; opacity: .5; transform: scale(.6); }
   .hao-ripple::after { animation: none; opacity: .25; transform: none; }
   .hao-btn:active { transform: none; }
