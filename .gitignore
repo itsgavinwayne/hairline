@@ -7,3 +7,8 @@ __pycache__/
 
 # tools/shots.py 的输出，放这里就不会进仓库
 .shots/
+
+# 只留在本地的工作材料：内部审查清单和截图、编辑器与助手的配置、改版记录
+docs/audit/
+.claude/
+.hallmark/
